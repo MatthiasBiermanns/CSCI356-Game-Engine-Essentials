@@ -1,13 +1,21 @@
-# vscode files
-.vs
+# Visual Studio / VSCode
+.vs/
+.vscode/
 .vsconfig
 
-# other files
-Assembly-CSharp.csproj
-CSCI356-Game-Engine-Essentials.sln
+# Unity generated
+Library/
+Logs/
+obj/
+Temp/
+UserSettings/
 
-# directories
-./Library
-./Logs
-./obj
-./UserSettings
+# Build results
+Build/
+Builds/
+
+# Auto-generated C# files
+Assembly-CSharp.csproj
+
+# Custom exclusions
+CSCI356-Game-Engine-Essentials.sln
