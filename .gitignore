@@ -1,0 +1,13 @@
+# vscode files
+.vs
+.vsconfig
+
+# other files
+Assembly-CSharp.csproj
+CSCI356-Game-Engine-Essentials
+
+# directories
+./Library
+./Logs
+./obj
+./UserSettings

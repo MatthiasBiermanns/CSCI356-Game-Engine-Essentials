@@ -22,7 +22,6 @@ public class SlideOpen : MonoBehaviour
 
     GameObject player;
     GameObject controller;
-    Spawner spawner;
 
 
     // Start is called before the first frame update
@@ -30,7 +29,6 @@ public class SlideOpen : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         controller = GameObject.FindGameObjectWithTag("GameController");
-        spawner = controller.GetComponent<Spawner>();
 
         openZ = transform.localPosition.z + 1.5f;
         closedZ = transform.localPosition.z;
@@ -72,8 +70,6 @@ public class SlideOpen : MonoBehaviour
     {
         isMoving = true;
         direction = -1;
-
-        spawner.spawn(color);
     }
 
     private IEnumerator WaitAndClose()
