@@ -4,10 +4,26 @@ using UnityEngine;
 
 public class ChangeColor : MonoBehaviour
 {
+    public Color currentColor;
+    public Color[] colors = { Color.white, Color.blue, Color.green, Color.red, Color.yellow };
     public void SetRandomColor()
     {
         Color random = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
         GetComponent<Renderer>().material.color = random;
+    }
+
+    public void SwitchColor()
+    {
+        if (currentColor == colors[colors.Length - 1])
+        {
+            currentColor = colors[0];
+        }
+        else
+        {
+            int index = System.Array.IndexOf(colors, currentColor);
+            currentColor = colors[index + 1];
+        }
+        GetComponent<Renderer>().material.color = currentColor;
     }
 
     // Start is called before the first frame update

@@ -15,6 +15,8 @@ public class FPSInput : MonoBehaviour
     public float jumpPower = 5f;
     private bool doubleJumpUsed = false;
 
+    public float pushForce = 2.0f;
+
     void Start()
     {
         charController = GetComponent<CharacterController>();
@@ -59,5 +61,17 @@ public class FPSInput : MonoBehaviour
         // pass the movement to the character controller
         charController.Move(movement);
 
+    }
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // check if a non-kinematic rigidbody was hit
+        Rigidbody body = hit.collider.attachedRigidbody;
+
+        if (body != null && !body.isKinematic)
+        {
+            // push the rigidbody in the move direction
+            body.velocity = hit.moveDirection * pushForce;
+        }
     }
 }

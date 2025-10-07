@@ -130,7 +130,8 @@ public class Shooter : MonoBehaviour
                 target.hitObject(shotDamage);
             } else if (colorTarget != null) 
             {
-                colorTarget.SetRandomColor();
+                //colorTarget.SetRandomColor();
+                colorTarget.SwitchColor();
             }
             else
             {

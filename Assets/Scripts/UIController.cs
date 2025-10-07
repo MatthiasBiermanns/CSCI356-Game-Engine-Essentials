@@ -90,6 +90,11 @@ public class UIController : MonoBehaviour
     {
         // change the volume
         AudioListener.volume = volumeSlider.value;
+        if (AudioListener.pause)
+        {
+            volumeImage.sprite = volumeOffSprite;
+            AudioListener.pause = false;
+        }
     }
 
     public void Mute()
