@@ -6,6 +6,8 @@ public class ChangeColor : MonoBehaviour
 {
     public Color currentColor;
     public Color[] colors = { Color.white, Color.blue, Color.green, Color.red, Color.yellow };
+    public Challenge challenge;
+
     public void SetRandomColor()
     {
         Color random = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
@@ -17,6 +19,10 @@ public class ChangeColor : MonoBehaviour
         if (currentColor == colors[colors.Length - 1])
         {
             currentColor = colors[0];
+            if (challenge != null)
+            {
+                challenge.CompleteChallenge();
+            }
         }
         else
         {

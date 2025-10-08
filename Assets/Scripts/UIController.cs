@@ -20,6 +20,9 @@ public class UIController : MonoBehaviour
     [SerializeField] private Sprite volumeOffSprite;
 
     [SerializeField] private Image progressFill;
+    [SerializeField] private Image progressBar;
+
+    [SerializeField] public Image helpPopup;
 
     NavMeshAgent agent;
 
@@ -31,6 +34,7 @@ public class UIController : MonoBehaviour
     {
         // don't display the popup on start
         settingsPopup.gameObject.SetActive(false);
+        helpPopup.gameObject.SetActive(false);
 
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
@@ -59,6 +63,7 @@ public class UIController : MonoBehaviour
     {
         // don't display the settings popup
         settingsPopup.gameObject.SetActive(false);
+        progressBar.gameObject.SetActive(true);
 
         player.GetComponent<FPSInput>().enabled = true;
         player.GetComponent<MouseLook>().enabled = true;
@@ -69,10 +74,20 @@ public class UIController : MonoBehaviour
     {
         // display the settings popup
         settingsPopup.gameObject.SetActive(true);
+        progressBar.gameObject.SetActive(false);
 
         player.GetComponent<FPSInput>().enabled = false;
         player.GetComponent<MouseLook>().enabled = false;
         mainCamera.GetComponent<MouseLook>().enabled = false;
+    }
+
+    public void OnOpenHelp()
+    {
+        helpPopup.gameObject.SetActive(true);
+    }
+    public void OnCloseHelp()
+    {
+        helpPopup.gameObject.SetActive(false);
     }
 
     public void OnMouseSensitivityChange()
@@ -111,11 +126,11 @@ public class UIController : MonoBehaviour
         progressFill.fillAmount = Mathf.Clamp01(value);
     }
 
-    public void UpdateProgressSmooth(float value, float duration = 0.5f)
+    public void UpdateProgressSmooth(float value = 0.2f)
     {
-        StartCoroutine(UpdateProgressCoroutine(value, duration));
+        StartCoroutine(UpdateProgressCoroutine(value));
     }
-    private IEnumerator UpdateProgressCoroutine(float fillValue, float duration)
+    private IEnumerator UpdateProgressCoroutine(float fillValue, float duration = 0.5f)
     {
         float startValue = progressFill.fillAmount;
         float targetValue = startValue + fillValue;

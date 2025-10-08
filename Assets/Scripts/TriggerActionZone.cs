@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TriggerActionZone : MonoBehaviour
 {
-    public UIController uiController;
+    public Challenge challenge;
 
     public Color zoneColor = Color.red;
 
@@ -26,7 +26,7 @@ public class TriggerActionZone : MonoBehaviour
         {
             Debug.Log("TriggerActionZone: Cube entered the zone");
             // Perform action here
-            uiController.UpdateProgressSmooth(0.2f);
+            challenge.CompleteChallenge();
         }
     }
 

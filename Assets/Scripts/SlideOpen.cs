@@ -22,6 +22,7 @@ public class SlideOpen : MonoBehaviour
 
     GameObject player;
     GameObject controller;
+    public KeyManager keyManager;
 
 
     // Start is called before the first frame update
@@ -64,6 +65,7 @@ public class SlideOpen : MonoBehaviour
     {
         isMoving = true;
         direction = 1;
+        keyManager.UseKey();
     }
 
     public void Close()

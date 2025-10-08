@@ -12,6 +12,8 @@ public class Collidable : MonoBehaviour
 
     public string keyColor = "";
 
+    public Challenge challenge;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,10 @@ public class Collidable : MonoBehaviour
             if (km != null && km.currentKey == "")
             {
                 km.PickUpKey(keyColor);
+                if (challenge != null)
+                {
+                    challenge.CompleteChallenge();
+                }
                 StartCoroutine(Respawn());
             }
         }
