@@ -18,7 +18,7 @@ public class Shootable : MonoBehaviour
         
     }
 
-    public void hitObject(int damage)
+    public void HitObject(int damage)
     {
         health -= damage;
 

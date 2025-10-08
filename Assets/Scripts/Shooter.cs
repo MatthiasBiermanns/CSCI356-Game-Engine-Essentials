@@ -44,7 +44,7 @@ public class Shooter : MonoBehaviour
 
             Vector3 point = new Vector3(cam.pixelWidth / 2 + randomX, cam.pixelHeight / 2 + randomY, 0);
 
-            fire(point);
+            Fire(point);
             yield return new WaitForSeconds(machineGunCD);
         }
     }
@@ -78,10 +78,10 @@ public class Shooter : MonoBehaviour
         switch (activeWeapon)
         {
             case Weapon.Handgun:
-                invokeHandgun();
+                InvokeHandgun();
                 break;
             case Weapon.MachineGun:
-                invokeMachineGun();
+                InvokeMachineGun();
                 break;
         }
 
@@ -110,7 +110,7 @@ public class Shooter : MonoBehaviour
         }
     }
 
-    void fire(Vector3 point)
+    void Fire(Vector3 point)
     {
         // create a ray from the point in the direction of the camera
         Ray ray = cam.ScreenPointToRay(point);
@@ -127,7 +127,7 @@ public class Shooter : MonoBehaviour
 
             if (target != null)
             {
-                target.hitObject(shotDamage);
+                target.HitObject(shotDamage);
             } else if (colorTarget != null) 
             {
                 //colorTarget.SetRandomColor();
@@ -142,17 +142,17 @@ public class Shooter : MonoBehaviour
         }
     }
 
-    void invokeHandgun()
+    void InvokeHandgun()
     {
         // on left mouse button click
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 point = new Vector3(cam.pixelWidth / 2, cam.pixelHeight / 2, 0);
-            fire(point);
+            Fire(point);
         }
     }
 
-    void invokeMachineGun()
+    void InvokeMachineGun()
     {
         if (Input.GetMouseButtonDown(0) && machineGunRoutine == null)
         {

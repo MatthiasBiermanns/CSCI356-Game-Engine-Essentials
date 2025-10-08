@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TriggerActionZone : MonoBehaviour
 {
+    public UIController uiController;
+
     public Color zoneColor = Color.red;
 
     // Start is called before the first frame update
@@ -24,6 +26,7 @@ public class TriggerActionZone : MonoBehaviour
         {
             Debug.Log("TriggerActionZone: Cube entered the zone");
             // Perform action here
+            uiController.UpdateProgressSmooth(0.2f);
         }
     }
 

@@ -74,13 +74,13 @@ public class SlideOpen : MonoBehaviour
 
     private IEnumerator WaitAndClose()
     {
-        // Warten bis Spieler auﬂerhalb der Distanz ist
+        // wait for player to move away
         while (player != null && Vector3.Distance(player.transform.position, transform.position) <= closeDistance)
         {
             yield return null;
         }
 
-        // Dann 5 Sekunden warten
+        // wait for close delay of closeDelay seconds
         yield return new WaitForSeconds(closeDelay);
 
         Close();

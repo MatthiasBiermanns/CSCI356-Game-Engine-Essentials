@@ -19,6 +19,8 @@ public class UIController : MonoBehaviour
     [SerializeField] private Sprite volumeOnSprite;
     [SerializeField] private Sprite volumeOffSprite;
 
+    [SerializeField] private Image progressFill;
+
     NavMeshAgent agent;
 
     GameObject player;
@@ -102,5 +104,28 @@ public class UIController : MonoBehaviour
         bool isMute = AudioListener.pause;
         volumeImage.sprite = isMute ? volumeOffSprite : volumeOnSprite;
         AudioListener.pause = !isMute;
+    }
+
+    public void UpdateProgress(float value)
+    {
+        progressFill.fillAmount = Mathf.Clamp01(value);
+    }
+
+    public void UpdateProgressSmooth(float value, float duration = 0.5f)
+    {
+        StartCoroutine(UpdateProgressCoroutine(value, duration));
+    }
+    private IEnumerator UpdateProgressCoroutine(float fillValue, float duration)
+    {
+        float startValue = progressFill.fillAmount;
+        float targetValue = startValue + fillValue;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            progressFill.fillAmount = Mathf.Lerp(startValue, Mathf.Clamp01(targetValue), t / duration);
+            yield return null;
+        }
+        progressFill.fillAmount = Mathf.Clamp01(targetValue);
     }
 }
