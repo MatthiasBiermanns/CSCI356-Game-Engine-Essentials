@@ -12,9 +12,7 @@ public class UIController : MonoBehaviour
     [SerializeField] Slider mouseSensitivitySlider;
     [SerializeField] Slider yawPitchSlider;
     [SerializeField] Slider volumeSlider;
-    public TMP_Text levelLabel;
-    public TMP_Text currentKeyText;
-
+    
     [SerializeField] private Image volumeImage;
     [SerializeField] private Sprite volumeOnSprite;
     [SerializeField] private Sprite volumeOffSprite;
@@ -22,9 +20,12 @@ public class UIController : MonoBehaviour
     [SerializeField] private Image progressFill;
     [SerializeField] private Image progressBar;
 
-    [SerializeField] public Image helpPopup;
+    [SerializeField] Image helpPopup;
+    [SerializeField] Image clock;
 
-    NavMeshAgent agent;
+    public TMP_Text levelLabel;
+    public TMP_Text currentKeyText;
+    public TMP_Text timerText;
 
     GameObject player;
     GameObject mainCamera;
@@ -35,6 +36,7 @@ public class UIController : MonoBehaviour
         // don't display the popup on start
         settingsPopup.gameObject.SetActive(false);
         helpPopup.gameObject.SetActive(false);
+        clock.gameObject.SetActive(false);
 
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
@@ -142,5 +144,22 @@ public class UIController : MonoBehaviour
             yield return null;
         }
         progressFill.fillAmount = Mathf.Clamp01(targetValue);
+    }
+
+    public void HideProgressBar()
+    {
+        progressBar.gameObject.SetActive(false);
+    }
+
+    public void UpdateTimerText(string text)
+    {
+        if (timerText != null)
+            timerText.text = text;
+    }
+
+    public void ShowTimer(bool show = true)
+    {
+        if (clock != null)
+            clock.gameObject.SetActive(show);
     }
 }

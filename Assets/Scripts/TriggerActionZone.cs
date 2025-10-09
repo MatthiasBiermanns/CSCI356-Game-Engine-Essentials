@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TriggerActionZone : MonoBehaviour
 {
     public Challenge challenge;
 
-    public Color zoneColor = Color.red;
+    public Color zoneColor;
 
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<Renderer>().material.color = zoneColor;
+        zoneColor = GetComponent<Renderer>().material.color;
     }
 
-    // Update is called once per frame
+    // Update is called once per frames
     void Update()
     {
         
@@ -25,8 +26,10 @@ public class TriggerActionZone : MonoBehaviour
         if (other.CompareTag("MovableCube"))
         {
             Debug.Log("TriggerActionZone: Cube entered the zone");
-            // Perform action here
-            challenge.CompleteChallenge();
+            if (other.GetComponent<Renderer>().material.color == zoneColor)
+            {
+                challenge.CompleteChallenge();
+            }
         }
     }
 
