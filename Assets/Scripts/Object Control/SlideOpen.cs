@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SlideOpen : MonoBehaviour
 {
-    public string color;
+    public Color color;
 
     float openZ;
     float closedZ; 
@@ -15,21 +15,22 @@ public class SlideOpen : MonoBehaviour
 
     public float closeDelay = 5.0f;
     public float closeDistance = 7.5f;
+    public float autoOpenDistance = 5.0f;
 
     float direction = -1;
     float interpolate = 0;
     bool isMoving = false;
+    public bool isLocked = true;
 
     GameObject player;
-    GameObject controller;
     public KeyManager keyManager;
 
+    [SerializeField] private ChallengeManager challengeManager;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        controller = GameObject.FindGameObjectWithTag("GameController");
 
         openZ = transform.localPosition.z + 1.5f;
         closedZ = transform.localPosition.z;
@@ -38,6 +39,7 @@ public class SlideOpen : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (isMoving)
         {
             // calculate the interpolation amount
@@ -57,15 +59,34 @@ public class SlideOpen : MonoBehaviour
                 isMoving = false;
             }
             transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, Mathf.Lerp(closedZ, openZ, interpolate));
+        } else if (!isLocked && transform.localPosition.z != openZ)
+        {
+            // only test, if possible to be opened
+            if (Vector3.Distance(player.transform.position, this.transform.position) <= autoOpenDistance)
+            {
+                Open();
+            }
         }
 
     }
 
+    public bool UnlockDoor(Color keyColor)
+    {
+        if (keyColor == color)
+        {
+            isLocked = false;
+            return true;
+        }
+        return false;
+    }
+
     public void Open()
     {
-        isMoving = true;
-        direction = 1;
-        keyManager.UseKey();
+        if(!isLocked)
+        {
+            isMoving = true;
+            direction = 1;
+        }
     }
 
     public void Close()

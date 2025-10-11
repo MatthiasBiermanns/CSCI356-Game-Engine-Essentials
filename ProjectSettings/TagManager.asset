@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - MovableCube
+  - 3rdPersonCam
+  - 0PersonCam
   layers:
   - Default
   - TransparentFX

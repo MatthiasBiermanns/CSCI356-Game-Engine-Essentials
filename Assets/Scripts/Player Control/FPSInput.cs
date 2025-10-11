@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-[AddComponentMenu("Control Script/FPS Input")] 
+[AddComponentMenu("Control Script/FPS Input")]
+[DefaultExecutionOrder(1200)] // after grappling hook
 public class FPSInput : MonoBehaviour
 {
     private CharacterController charController;
@@ -16,6 +17,15 @@ public class FPSInput : MonoBehaviour
     private bool doubleJumpUsed = false;
 
     public float pushForce = 2.0f;
+
+    // input + gravity
+    private Vector3 baseVelocity = Vector3.zero;
+    // for external scripts (grappling hook)
+    public Vector3 externalVelocity = Vector3.zero;
+    [HideInInspector] public bool suspendGravity = false;
+
+    private Vector3 standUpScale;
+    private Vector3 sneakingScale;
 
     void Start()
     {
@@ -47,20 +57,31 @@ public class FPSInput : MonoBehaviour
             }
         }
 
-        // ensure gravitational impact
-        yVelocity += gravity * Time.deltaTime;
-        movement.y = yVelocity;
+        if (charController.isGrounded && yVelocity < 0f)
+            yVelocity = -2f;
 
-        // ensure movement is independent of the framerate
-        movement *= Time.deltaTime;
+        // ensure gravitational impact
+        if (!suspendGravity)
+            yVelocity += gravity * Time.deltaTime;
+        movement.y = yVelocity;
 
         // transform from local space to global space
         movement = transform.TransformDirection(movement);
 
+        baseVelocity = movement;
+    }
 
-        // pass the movement to the character controller
+    void LateUpdate()
+    {
+        // Summe aus Basis + externer (Grapple) Velocity
+        Vector3 movement = baseVelocity + externalVelocity;
+
+        // ensure movement is independent of the framerate
+        movement *= Time.deltaTime;
         charController.Move(movement);
 
+        // externen Anteil nach Verbrauch zurücksetzen
+        externalVelocity = Vector3.zero;
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)

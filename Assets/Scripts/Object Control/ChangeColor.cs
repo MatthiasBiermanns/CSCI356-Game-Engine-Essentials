@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class ChangeColor : MonoBehaviour
 {
-    public Color currentColor;
-    public Color[] colors = { Color.white, Color.blue, Color.green, Color.red, Color.yellow };
+    public UnityEngine.Color currentColor;
+    public UnityEngine.Color[] colors = { UnityEngine.Color.white, UnityEngine.Color.green, UnityEngine.Color.yellow, UnityEngine.Color.red, UnityEngine.Color.magenta, UnityEngine.Color.blue};
     public Challenge challenge;
 
-    public void SetRandomColor()
-    {
-        Color random = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
-        GetComponent<Renderer>().material.color = random;
-    }
+    public bool isFreezed = false;
+
 
     public void SwitchColor()
     {
+        if (isFreezed) return;
+
         if (currentColor == colors[colors.Length - 1])
         {
             currentColor = colors[0];

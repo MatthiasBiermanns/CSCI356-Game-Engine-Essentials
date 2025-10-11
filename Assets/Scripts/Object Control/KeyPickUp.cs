@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collidable : MonoBehaviour
+public class KeyPickUp : MonoBehaviour
 {
     private GameObject player;
     private float respawnTime = 15.0f;
@@ -10,7 +10,7 @@ public class Collidable : MonoBehaviour
     private Collider col;
     private Renderer rend;
 
-    public string keyColor = "";
+    public Color keyColor = Color.None;
 
     public Challenge challenge;
 
@@ -32,7 +32,7 @@ public class Collidable : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             KeyManager km = other.GetComponent<KeyManager>();
-            if (km != null && km.currentKey == "")
+            if (km != null && km.currentKey == Color.None)
             {
                 km.PickUpKey(keyColor);
                 if (challenge != null)

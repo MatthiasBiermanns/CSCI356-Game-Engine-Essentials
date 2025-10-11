@@ -34,7 +34,7 @@ public class Challenge : MonoBehaviour
             onChallengeCompleted.Invoke();
             if (label != null)
             {
-                label.color = Color.green;
+                label.color = UnityEngine.Color.green;
             }
         }
     }
