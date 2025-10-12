@@ -5,31 +5,18 @@ using UnityEngine;
 public class ChangeColor : MonoBehaviour
 {
     public UnityEngine.Color currentColor;
-    public UnityEngine.Color[] colors = { UnityEngine.Color.white, UnityEngine.Color.green, UnityEngine.Color.yellow, UnityEngine.Color.red, UnityEngine.Color.magenta, UnityEngine.Color.blue};
-    public Challenge challenge;
+    public UnityEngine.Color[] colors = { 
+        UnityEngine.Color.white, 
+        UnityEngine.Color.green, 
+        UnityEngine.Color.yellow, 
+        UnityEngine.Color.red, 
+        UnityEngine.Color.magenta, 
+        UnityEngine.Color.blue
+    };
 
     public bool isFreezed = false;
 
-
-    public void SwitchColor()
-    {
-        if (isFreezed) return;
-
-        if (currentColor == colors[colors.Length - 1])
-        {
-            currentColor = colors[0];
-            if (challenge != null)
-            {
-                challenge.CompleteChallenge();
-            }
-        }
-        else
-        {
-            int index = System.Array.IndexOf(colors, currentColor);
-            currentColor = colors[index + 1];
-        }
-        GetComponent<Renderer>().material.color = currentColor;
-    }
+    private List<Collider> collidingObjects = new();
 
     // Start is called before the first frame update
     void Start()
@@ -41,5 +28,36 @@ public class ChangeColor : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        collidingObjects.Add(other);
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        collidingObjects.Remove(other);
+    }
+
+    public void SwitchColor()
+    {
+        if (isFreezed) return;
+
+        int index = System.Array.IndexOf(colors, currentColor);
+        currentColor = colors[(index + 1) % colors.Length];
+
+        GetComponent<Renderer>().material.color = currentColor;
+
+        // inform potential triggerZones about new color
+        foreach (Collider collider in collidingObjects)
+        {
+            TriggerZone tz = collider.gameObject.GetComponent<TriggerZone>();
+
+            if (tz != null) 
+            {
+                tz.NotifiedColorChange(gameObject);
+            }
+        }
     }
 }

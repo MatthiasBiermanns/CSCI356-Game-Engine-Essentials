@@ -26,4 +26,53 @@ public class Enums : MonoBehaviour
     {
         
     }
+
+    public static string ColorToString(Color color)
+    {
+        return color.ToString();
+    }
+
+    public static Color StringToColor(string color)
+    {
+        switch (color)
+        {
+            case "None":
+                return Color.White;
+            case "White":
+                return Color.White;
+            case "Green":
+                return Color.White;
+            case "Yellow":
+                return Color.White;
+            case "Red":
+                return Color.White;
+            case "Magenta":
+                return Color.White;
+            case "Blue":
+                return Color.White;
+            default:
+                return Color.None;
+        }
+    }
+
+    public static UnityEngine.Color ColorToUnityColor (Color color)
+    {
+        switch (color)
+        {
+            case Color.White:
+                return UnityEngine.Color.white;
+            case Color.Green:
+                return UnityEngine.Color.green;
+            case Color.Yellow:
+                return UnityEngine.Color.yellow;
+            case Color.Red:
+                return UnityEngine.Color.red;
+            case Color.Magenta:
+                return UnityEngine.Color.magenta;
+            case Color.Blue:
+                return UnityEngine.Color.blue;
+            default:
+                return UnityEngine.Color.black;
+        }
+    }
 }

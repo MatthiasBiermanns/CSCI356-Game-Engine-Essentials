@@ -1,27 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class ChallengeManager : MonoBehaviour
 {
-    public List<Challenge> challenges = new List<Challenge>();
-    public int remainingChallenges = 0;
+    public Challenge[] challenges = {};
+    private List<Challenge> toCheckChallenges = new();
+    public int remainingChallenges;
     public UnityEvent onAllChallengesCompleted;
+    [SerializeField] private bool enforceOrder = false;
 
     public UIController uiController;
 
-    public bool allChallengesCompleted = false;
+    private bool allChallengesCompleted = true;
+    private bool challengesFinished = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        foreach (var challenge in challenges)
+        bool lastCompleted = true;
+        foreach (Challenge challenge in challenges)
         {
-            if (challenge != null && !challenge.isCompleted)
+            if (!challenge.getIsCompleted())
             {
                 remainingChallenges++;
+                toCheckChallenges.Add(challenge);
                 challenge.onChallengeCompleted.AddListener(OnChallengeCompleted);
+
+                if (challenge.canUncomplete)
+                {
+                    challenge.onChallengeUncompleted.AddListener(OnChallengeUncompleted);
+                }
+
                 allChallengesCompleted = false;
             }
         }
@@ -30,12 +42,30 @@ public class ChallengeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // check to avoid unnecessary calculations
+        if (challengesFinished)
+        { 
+            return; 
+        }
+
+        foreach (Challenge challenge in toCheckChallenges.ToList())
+        {
+            challenge.CheckCompleted();
+        }
+
+        allChallengesCompleted = toCheckChallenges.All((Challenge c) => c.getIsCompleted());
+
+        if (allChallengesCompleted)
+        {
+            onAllChallengesCompleted.Invoke();
+            challengesFinished = true;
+        }
     }
-    void OnChallengeCompleted()
+
+    void OnChallengeCompleted(Challenge completedChallenge)
     {
         remainingChallenges--;
-        uiController.UpdateProgressSmooth(1.0f / challenges.Count);
+        uiController.UpdateProgressSmooth(1.0f / challenges.Length);
         Debug.Log($"ChallengeManager: Remaining challenges: {remainingChallenges}");
         if (remainingChallenges <= 0)
         {
@@ -43,5 +73,16 @@ public class ChallengeManager : MonoBehaviour
             allChallengesCompleted = true;
             onAllChallengesCompleted.Invoke();
         }
+
+        if (!completedChallenge.canUncomplete)
+        {
+            toCheckChallenges.Remove(completedChallenge);
+        }
+    }
+    void OnChallengeUncompleted(Challenge completedChallenge)
+    {
+        remainingChallenges++;
+        uiController.UpdateProgressSmooth(1.0f / challenges.Length);
+        Debug.Log($"ChallengeManager: Remaining challenges: {remainingChallenges}");
     }
 }

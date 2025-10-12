@@ -12,11 +12,10 @@ GameObject:
   - component: {fileID: 7004797409050924486}
   - component: {fileID: 6401487008644193107}
   - component: {fileID: 657933047836984650}
-  - component: {fileID: 5342224740133816606}
   - component: {fileID: 8799297322676246137}
-  - component: {fileID: 2485898008918753395}
+  - component: {fileID: 5342224740133816606}
   m_Layer: 0
-  m_Name: TriggerZone
+  m_Name: Visible Trigger Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7004797409050924486
 MeshFilter:
@@ -108,20 +107,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5342224740133816606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6151940550267986732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5707973b189bd5d4389496953875d9a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  challenge: {fileID: 2485898008918753395}
-  zoneColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!54 &8799297322676246137
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -145,11 +130,11 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2485898008918753395
+--- !u!114 &5342224740133816606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,24 +143,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6151940550267986732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f87960346076a404bb75c5ffd7c87c53, type: 3}
+  m_Script: {fileID: 11500000, guid: 5707973b189bd5d4389496953875d9a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  challengeName: MoveCube
-  onChallengeCompleted:
+  onTrigger:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
-        m_MethodName: UpdateProgressSmooth
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0.2
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  label: {fileID: 0}
-  isCompleted: 0
+      m_Calls: []
+  onUntrigger:
+    m_PersistentCalls:
+      m_Calls: []
+  triggeringTags: []
+  freezeTriggeringObject: 0
+  zoneColor: 0

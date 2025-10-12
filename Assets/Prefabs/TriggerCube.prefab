@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -8256329519578766600}
   m_Layer: 0
   m_Name: TriggerCube
-  m_TagString: Untagged
+  m_TagString: MovableCube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,11 +150,11 @@ MonoBehaviour:
   currentColor: {r: 0, g: 0, b: 0, a: 0}
   colors:
   - {r: 1, g: 1, b: 1, a: 1}
-  - {r: 0, g: 0, b: 1, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
   - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  challenge: {fileID: 0}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
   isFreezed: 0
 --- !u!114 &-8256329519578766600
 MonoBehaviour:
@@ -168,3 +168,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98673994ea3c534c853aa6a20308dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initiallyFreezed: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,15 +9,23 @@ using UnityEngine.Events;
 public class Challenge : MonoBehaviour
 {
     public string challengeName;
-    public UnityEvent onChallengeCompleted;
+    public bool canUncomplete = false;
+
+    [System.Serializable]
+    public class ChallengeEvent : UnityEvent<Challenge> { }
+
+    public ChallengeEvent onChallengeCompleted;
+    public ChallengeEvent onChallengeUncompleted;
+
     public TMP_Text label;
 
-    public bool isCompleted = false;
+    [SerializeField] private Trigger[] triggers;
+    private bool isCompleted = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        CheckCompleted();
     }
 
     // Update is called once per frame
@@ -25,17 +34,54 @@ public class Challenge : MonoBehaviour
         
     }
 
-    public void CompleteChallenge()
+    public void CheckCompleted()
     {
-        if (!isCompleted)
+        bool newCompleted = triggers.All((Trigger t) => t.getIsTriggered() == true);
+
+        if (isCompleted != newCompleted)
         {
-            isCompleted = true;
-            Debug.Log($"Challenge '{challengeName}' completed!");
-            onChallengeCompleted.Invoke();
-            if (label != null)
+            isCompleted = newCompleted;
+            if(isCompleted == true)
             {
-                label.color = UnityEngine.Color.green;
+                CompleteChallenge();
+                return;
+            }
+
+            if (canUncomplete == true)
+            {
+                UncompleteChallenge();
             }
         }
+    }
+
+    void CompleteChallenge()
+    {
+        if ( onChallengeCompleted != null)
+        {
+            onChallengeCompleted.Invoke(this);
+        }
+
+        if (label != null)
+        {
+            label.color = UnityEngine.Color.green;
+        }
+    }
+
+    void UncompleteChallenge()
+    {
+        if( onChallengeUncompleted != null )
+        { 
+            onChallengeUncompleted.Invoke(this); 
+        }
+
+        if (label != null)
+        {
+            label.color = UnityEngine.Color.white;
+        }
+    }
+
+    public bool getIsCompleted()
+    {
+        return isCompleted;
     }
 }

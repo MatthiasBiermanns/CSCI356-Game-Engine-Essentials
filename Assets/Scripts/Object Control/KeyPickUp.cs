@@ -37,7 +37,7 @@ public class KeyPickUp : MonoBehaviour
                 km.PickUpKey(keyColor);
                 if (challenge != null)
                 {
-                    challenge.CompleteChallenge();
+                    
                 }
                 StartCoroutine(Respawn());
             }

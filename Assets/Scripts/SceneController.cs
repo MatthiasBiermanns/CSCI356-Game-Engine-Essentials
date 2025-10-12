@@ -15,7 +15,7 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        controller.currentKeyText.text = "Current Key: " + KeyColorToString(currentKey);
+        controller.currentKeyText.text = "Current Key: " + Enums.ColorToString(currentKey);
         controller.levelLabel.text = currentLevel.ToString();
     }
 
@@ -30,7 +30,7 @@ public class SceneController : MonoBehaviour
     }
     public void PickUpKey(Color key)
     {
-        controller.currentKeyText.text = "Current Key: " + KeyColorToString(key);
+        controller.currentKeyText.text = "Current Key: " + Enums.ColorToString(key);
     }
 
     public void ResetKeyText()
@@ -71,28 +71,5 @@ public class SceneController : MonoBehaviour
     public float GetElapsedTime()
     {
         return elapsedTime;
-    }
-
-    public string KeyColorToString(Color keyColor)
-    {
-        switch (keyColor)
-        {
-            case Color.None:
-                return "none";
-            case Color.White:
-                return "white";
-            case Color.Green:
-                return "green";
-            case Color.Yellow:
-                return "yellow";
-            case Color.Red:
-                return "red";
-            case Color.Magenta:
-                return "magenta";
-            case Color.Blue:
-                return "blue";
-            default:
-                return "";
-        }
     }
 }
