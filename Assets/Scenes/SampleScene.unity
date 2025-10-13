@@ -2525,6 +2525,10 @@ PrefabInstance:
       propertyPath: triggeringTags.Array.data[0]
       value: MovableCube
       objectReference: {fileID: 0}
+    - target: {fileID: 5342224740133816606, guid: 209a2d998f9c62e419be9dbb73ba465f, type: 3}
+      propertyPath: triggeringTags.Array.data[1]
+      value: MovableCube
+      objectReference: {fileID: 0}
     - target: {fileID: 6151940550267986732, guid: 209a2d998f9c62e419be9dbb73ba465f, type: 3}
       propertyPath: m_Name
       value: TriggerZone Pull
@@ -9515,7 +9519,7 @@ MonoBehaviour:
   - {fileID: 1831076113}
   - {fileID: 550354330}
   - {fileID: 1950748495}
-  enforceOrder: 1
+  enforceOrder: 0
   triggerIntermediatePosition: 6
   isUniqueIntermediateTrigger: 1
   onIntermediateCompleted:
