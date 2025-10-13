@@ -7,6 +7,7 @@ TagManager:
   - MovableCube
   - 3rdPersonCam
   - 0PersonCam
+  - AIAgent
   layers:
   - Default
   - TransparentFX

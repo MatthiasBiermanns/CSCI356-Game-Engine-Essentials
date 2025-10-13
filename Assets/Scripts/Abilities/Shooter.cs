@@ -124,6 +124,7 @@ public class Shooter : MonoBehaviour
             GameObject hitObject = hit.transform.gameObject;
             Shootable target = hitObject.GetComponent<Shootable>();
             ChangeColor colorTarget = hitObject.GetComponent<ChangeColor>();
+            AgentHealth agent = hitObject.GetComponent<AgentHealth>();
 
             if (target != null)
             {
@@ -132,6 +133,9 @@ public class Shooter : MonoBehaviour
             {
                 //colorTarget.SetRandomColor();
                 colorTarget.SwitchColor();
+            } else if (agent != null)
+            {
+                agent.TakeDamage(shotDamage);
             }
             else
             {
