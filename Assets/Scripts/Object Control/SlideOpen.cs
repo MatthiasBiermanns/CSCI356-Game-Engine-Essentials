@@ -29,14 +29,13 @@ public class SlideOpen : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
 
-        openZ = transform.localPosition.z + 1.5f;
+        openZ = transform.localPosition.z + 1.45f;
         closedZ = transform.localPosition.z;
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (isMoving)
         {
             // calculate the interpolation amount

@@ -145,9 +145,15 @@ public class UIController : MonoBehaviour
         progressFill.fillAmount = Mathf.Clamp01(targetValue);
     }
 
+    private IEnumerator VanishProgressBar()
+    {
+        yield return new WaitForSeconds(1.0f);
+        progressBar.gameObject.SetActive(false);
+    }
+
     public void HideProgressBar()
     {
-        progressBar.gameObject.SetActive(false);
+        StartCoroutine(VanishProgressBar());
     }
 
     public void UpdateTimerText(string text)

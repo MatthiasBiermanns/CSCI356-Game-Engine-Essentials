@@ -8,9 +8,6 @@ public class MoveRamp : MonoBehaviour
 {
     public string color;
 
-    float openZ;
-    float closedZ;
-
     public float raiseAmount = 1.6f;
     public float speed = 1.0f;
 

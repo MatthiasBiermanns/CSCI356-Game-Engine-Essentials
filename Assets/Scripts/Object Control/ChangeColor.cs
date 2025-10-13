@@ -11,7 +11,8 @@ public class ChangeColor : MonoBehaviour
         UnityEngine.Color.yellow, 
         UnityEngine.Color.red, 
         UnityEngine.Color.magenta, 
-        UnityEngine.Color.blue
+        UnityEngine.Color.blue,
+        UnityEngine.Color.black
     };
 
     public bool isFreezed = false;

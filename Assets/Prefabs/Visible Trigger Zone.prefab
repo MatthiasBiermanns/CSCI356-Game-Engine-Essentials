@@ -152,7 +152,8 @@ MonoBehaviour:
   onUntrigger:
     m_PersistentCalls:
       m_Calls: []
-  triggeringTags: []
-  freezeTriggeringObject: 0
+  triggeringTags:
+  - MovableCube
+  freezeTriggeringObject: 1
   triggerObjectCollider: {fileID: 0}
-  zoneColor: 0
+  zoneColor: 4

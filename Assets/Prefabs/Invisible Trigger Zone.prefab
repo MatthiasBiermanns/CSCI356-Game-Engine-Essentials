@@ -125,6 +125,8 @@ MonoBehaviour:
   onUntrigger:
     m_PersistentCalls:
       m_Calls: []
-  triggeringTags: []
+  triggeringTags:
+  - Player
   freezeTriggeringObject: 0
-  zoneColor: {r: 0, g: 0, b: 0, a: 0}
+  triggerObjectCollider: {fileID: 0}
+  zoneColor: 0

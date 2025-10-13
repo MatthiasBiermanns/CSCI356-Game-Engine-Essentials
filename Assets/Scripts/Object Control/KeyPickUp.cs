@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class KeyPickUp : MonoBehaviour
 {
-    private GameObject player;
-    private float respawnTime = 15.0f;
-
-    private Collider col;
-    private Renderer rend;
-
     public Color keyColor = Color.None;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        col = GetComponent<Collider>();
-        rend = GetComponent<Renderer>();
+        
     }
 
     // Update is called once per frame
@@ -25,6 +17,7 @@ public class KeyPickUp : MonoBehaviour
     {
         
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -33,17 +26,10 @@ public class KeyPickUp : MonoBehaviour
             if (km != null && km.currentKey == Color.None)
             {
                 km.PickUpKey(keyColor);
-                StartCoroutine(Respawn());
+
+                // destroy to disable all parts of prefab
+                Destroy(gameObject);
             }
         }
-        
-    }
-    IEnumerator Respawn()
-    {
-        col.enabled = false;
-        rend.enabled = false;
-        yield return new WaitForSeconds(respawnTime);
-        col.enabled = true;
-        rend.enabled = true;
     }
 }

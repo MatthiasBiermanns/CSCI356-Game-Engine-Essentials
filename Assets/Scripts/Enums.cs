@@ -11,6 +11,7 @@ public enum Color
     Red,
     Magenta,
     Blue,
+    Black,
 }
 
 public class Enums : MonoBehaviour
@@ -36,20 +37,20 @@ public class Enums : MonoBehaviour
     {
         switch (color)
         {
-            case "None":
-                return Color.White;
             case "White":
                 return Color.White;
             case "Green":
-                return Color.White;
+                return Color.Green;
             case "Yellow":
-                return Color.White;
+                return Color.Yellow;
             case "Red":
-                return Color.White;
+                return Color.Red;
             case "Magenta":
-                return Color.White;
+                return Color.Magenta;
             case "Blue":
-                return Color.White;
+                return Color.Blue;
+            case "Black":
+                return Color.Black;
             default:
                 return Color.None;
         }
@@ -71,6 +72,8 @@ public class Enums : MonoBehaviour
                 return UnityEngine.Color.magenta;
             case Color.Blue:
                 return UnityEngine.Color.blue;
+            case Color.Black:
+                return UnityEngine.Color.black;
             default:
                 return UnityEngine.Color.black;
         }

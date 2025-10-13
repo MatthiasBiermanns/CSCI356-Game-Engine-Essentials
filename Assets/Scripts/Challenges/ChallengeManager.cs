@@ -19,7 +19,6 @@ public class ChallengeManager : MonoBehaviour
 
     private bool intermediateTriggered = false;
     private int remainingChallenges;
-    private int currentChallenge = 0;
 
     // Start is called before the first frame update
     void Start()
