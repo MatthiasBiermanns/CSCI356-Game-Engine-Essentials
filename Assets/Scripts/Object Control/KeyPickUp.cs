@@ -12,8 +12,6 @@ public class KeyPickUp : MonoBehaviour
 
     public Color keyColor = Color.None;
 
-    public Challenge challenge;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -35,10 +33,6 @@ public class KeyPickUp : MonoBehaviour
             if (km != null && km.currentKey == Color.None)
             {
                 km.PickUpKey(keyColor);
-                if (challenge != null)
-                {
-                    
-                }
                 StartCoroutine(Respawn());
             }
         }

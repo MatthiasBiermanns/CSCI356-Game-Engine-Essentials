@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,83 +7,148 @@ using UnityEngine.Events;
 
 public class ChallengeManager : MonoBehaviour
 {
-    public Challenge[] challenges = {};
-    private List<Challenge> toCheckChallenges = new();
-    public int remainingChallenges;
-    public UnityEvent onAllChallengesCompleted;
+    public UIController uiController;
+    [SerializeField] Challenge[] challenges = {};
+
     [SerializeField] private bool enforceOrder = false;
 
-    public UIController uiController;
+    [SerializeField] int triggerIntermediatePosition;
+    [SerializeField] bool isUniqueIntermediateTrigger = true;
+    public UnityEvent onIntermediateCompleted;
+    public UnityEvent onAllChallengesCompleted;
 
-    private bool allChallengesCompleted = true;
-    private bool challengesFinished = false;
+    private bool intermediateTriggered = false;
+    private int remainingChallenges;
+    private int currentChallenge = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        bool lastCompleted = true;
+        // if enforceOrder, only activate first challenge
+        if (enforceOrder && challenges.Length > 0)
+        {
+            challenges[0].isActive = true;
+        }
+
         foreach (Challenge challenge in challenges)
         {
+            // activate all, if no order necessary
+            if (!enforceOrder)
+            {
+                challenge.isActive = true;
+            }
+            
             if (!challenge.getIsCompleted())
             {
-                remainingChallenges++;
-                toCheckChallenges.Add(challenge);
                 challenge.onChallengeCompleted.AddListener(OnChallengeCompleted);
 
                 if (challenge.canUncomplete)
                 {
                     challenge.onChallengeUncompleted.AddListener(OnChallengeUncompleted);
                 }
-
-                allChallengesCompleted = false;
             }
+        }
+
+        remainingChallenges = GetRemainingChallenges();
+
+        if (remainingChallenges <= 0)
+        {
+            // invoke, to not cause issues
+            onAllChallengesCompleted.Invoke();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // check to avoid unnecessary calculations
-        if (challengesFinished)
-        { 
-            return; 
-        }
-
-        foreach (Challenge challenge in toCheckChallenges.ToList())
+        foreach (Challenge challenge in challenges)
         {
             challenge.CheckCompleted();
-        }
-
-        allChallengesCompleted = toCheckChallenges.All((Challenge c) => c.getIsCompleted());
-
-        if (allChallengesCompleted)
-        {
-            onAllChallengesCompleted.Invoke();
-            challengesFinished = true;
         }
     }
 
     void OnChallengeCompleted(Challenge completedChallenge)
     {
-        remainingChallenges--;
-        uiController.UpdateProgressSmooth(1.0f / challenges.Length);
+        // activate next uncompleted challenge
+        if (enforceOrder)
+        {
+            int challengeIndex = Array.IndexOf(challenges, completedChallenge);
+
+            for (int i = challengeIndex; i < challenges.Length-1; i++)
+            {
+                // activate next challenge
+                challenges[i + 1].isActive = true;
+
+                // keep on going until first challenge active and uncompleted
+                if (!challenges[i + 1].getIsCompleted())
+                {
+                    break;
+                }
+            }
+        }
+
+        remainingChallenges = GetRemainingChallenges();
         Debug.Log($"ChallengeManager: Remaining challenges: {remainingChallenges}");
+
+        UpdateProgressUi();
+
+
+        if (!intermediateTriggered)
+        {
+            if (triggerIntermediatePosition <= challenges.Length - remainingChallenges)
+            {
+                intermediateTriggered = true;
+                onIntermediateCompleted.Invoke();
+            }
+        }
+
+
         if (remainingChallenges <= 0)
         {
             Debug.Log("ChallengeManager: All challenges completed!");
-            allChallengesCompleted = true;
             onAllChallengesCompleted.Invoke();
-        }
 
-        if (!completedChallenge.canUncomplete)
-        {
-            toCheckChallenges.Remove(completedChallenge);
+            // deactivate challenge Manager now
+            gameObject.SetActive(false);
         }
     }
     void OnChallengeUncompleted(Challenge completedChallenge)
     {
-        remainingChallenges++;
-        uiController.UpdateProgressSmooth(1.0f / challenges.Length);
+        // handle uncomplete for following challenges
+        if (enforceOrder)
+        {
+            int challengeIndex = Array.IndexOf(challenges, completedChallenge);
+
+            // deaactivate & if possible uncomplete challenges
+            for (int i = challengeIndex+1; i < challenges.Length; i++)
+            {
+                // if inactive challenges reached, end
+                if (!challenges[i].isActive)
+                {
+                    break;
+                }
+                //challenges[i].setIsCompleted(false);
+                challenges[i].isActive = false;
+            }
+        }
+
+        if (intermediateTriggered && !isUniqueIntermediateTrigger)
+        {
+            intermediateTriggered = false;
+        }
+
+        remainingChallenges = GetRemainingChallenges();
         Debug.Log($"ChallengeManager: Remaining challenges: {remainingChallenges}");
+        UpdateProgressUi();
+    }
+
+    void UpdateProgressUi()
+    {
+        uiController.UpdateProgressSmooth((1.0f / challenges.Length) * (challenges.Length - remainingChallenges));
+    }
+
+    int GetRemainingChallenges()
+    {
+        return challenges.Length - challenges.Count((Challenge c) => c.getIsCompleted());
     }
 }

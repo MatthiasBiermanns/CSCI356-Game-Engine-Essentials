@@ -21,11 +21,12 @@ public class Challenge : MonoBehaviour
 
     [SerializeField] private Trigger[] triggers;
     private bool isCompleted = false;
+    public bool isActive = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        CheckCompleted();
+
     }
 
     // Update is called once per frame
@@ -36,6 +37,16 @@ public class Challenge : MonoBehaviour
 
     public void CheckCompleted()
     {
+        if (!isActive)
+        {
+            return;
+        }
+
+        if (isCompleted && !canUncomplete)
+        {
+            return;
+        }
+        
         bool newCompleted = triggers.All((Trigger t) => t.getIsTriggered() == true);
 
         if (isCompleted != newCompleted)
@@ -51,6 +62,7 @@ public class Challenge : MonoBehaviour
             {
                 UncompleteChallenge();
             }
+
         }
     }
 
@@ -69,6 +81,11 @@ public class Challenge : MonoBehaviour
 
     void UncompleteChallenge()
     {
+        if (!canUncomplete)
+        {
+            return;
+        }
+
         if( onChallengeUncompleted != null )
         { 
             onChallengeUncompleted.Invoke(this); 
@@ -82,6 +99,28 @@ public class Challenge : MonoBehaviour
 
     public bool getIsCompleted()
     {
+        if (!isActive)
+        {
+            return false;
+        }
         return isCompleted;
+        
+    }
+
+    internal void setIsCompleted(bool value)
+    {
+        if (isCompleted == value)
+        {
+            return;
+        }
+        isCompleted = value;
+
+        if (isCompleted)
+        {
+            CompleteChallenge();
+        } else if (canUncomplete)
+        {
+            UncompleteChallenge();
+        }
     }
 }

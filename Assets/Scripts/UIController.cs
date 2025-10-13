@@ -132,10 +132,9 @@ public class UIController : MonoBehaviour
     {
         StartCoroutine(UpdateProgressCoroutine(value));
     }
-    private IEnumerator UpdateProgressCoroutine(float fillValue, float duration = 0.5f)
+    private IEnumerator UpdateProgressCoroutine(float targetValue, float duration = 0.5f)
     {
         float startValue = progressFill.fillAmount;
-        float targetValue = startValue + fillValue;
         float t = 0f;
         while (t < duration)
         {

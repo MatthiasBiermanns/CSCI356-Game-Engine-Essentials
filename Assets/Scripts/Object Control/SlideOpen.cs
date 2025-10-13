@@ -23,9 +23,6 @@ public class SlideOpen : MonoBehaviour
     public bool isLocked = true;
 
     GameObject player;
-    public KeyManager keyManager;
-
-    [SerializeField] private ChallengeManager challengeManager;
 
     // Start is called before the first frame update
     void Start()

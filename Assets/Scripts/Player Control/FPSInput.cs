@@ -24,9 +24,6 @@ public class FPSInput : MonoBehaviour
     public Vector3 externalVelocity = Vector3.zero;
     [HideInInspector] public bool suspendGravity = false;
 
-    private Vector3 standUpScale;
-    private Vector3 sneakingScale;
-
     void Start()
     {
         charController = GetComponent<CharacterController>();
