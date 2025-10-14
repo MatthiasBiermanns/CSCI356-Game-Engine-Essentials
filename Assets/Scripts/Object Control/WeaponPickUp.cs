@@ -14,6 +14,7 @@ public class WeaponPickUp : MonoBehaviour
 {
     private GameObject shooterCam;
     public WeaponType type;
+    public int grenadesToAdd = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +47,7 @@ public class WeaponPickUp : MonoBehaviour
                 shooterComponent.activeWeapon = Weapon.MachineGun;
                 break;
             case WeaponType.Grenade:
-                shooterComponent.grenades += 5;
+                shooterComponent.grenades += grenadesToAdd;
                 break;
         }
 

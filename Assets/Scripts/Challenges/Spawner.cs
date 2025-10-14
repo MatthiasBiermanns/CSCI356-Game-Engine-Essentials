@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
     [SerializeField] GameObject simpleKeyPrefab;
     [SerializeField] GameObject detailedKeyPrefab;
+    [SerializeField] GameObject grenadePickUpPrefab;
+    [SerializeField] NavMeshAgent agentPrefab;
 
     [SerializeField] Material redMaterial;
     [SerializeField] Material greenMaterial;
@@ -15,6 +18,11 @@ public class Spawner : MonoBehaviour
     [SerializeField] Material blackMaterial;
 
     [SerializeField] Vector3 keyPosition;
+    [SerializeField] Vector3 grenadePickUpPosition;
+
+    [SerializeField] Vector3 agentSpawnPosition;
+    [SerializeField] Transform agentTarget;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +33,13 @@ public class Spawner : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SpawnGrenadePickUp(int grenadesToAdd)
+    {
+        GameObject newGrenadePickUp = Instantiate(grenadePickUpPrefab, grenadePickUpPosition, Quaternion.identity);
+        newGrenadePickUp.GetComponent<WeaponPickUp>().type = WeaponType.Grenade;
+        newGrenadePickUp.GetComponent<WeaponPickUp>().grenadesToAdd = grenadesToAdd;
     }
 
     public void SpawnKey(string color)
@@ -70,5 +85,11 @@ public class Spawner : MonoBehaviour
             default:
                 return blackMaterial;
         }
+    }
+
+    public void SpawnAgent()
+    {
+        NavMeshAgent newAgent = Instantiate(agentPrefab, agentSpawnPosition, Quaternion.identity);
+        newAgent.SetDestination(agentTarget.position);
     }
 }
