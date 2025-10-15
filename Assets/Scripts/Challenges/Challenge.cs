@@ -55,6 +55,7 @@ public class Challenge : MonoBehaviour
             if(isCompleted == true)
             {
                 CompleteChallenge();
+                Debug.Log("Challenge completed: " + challengeName);
                 return;
             }
 
@@ -68,7 +69,7 @@ public class Challenge : MonoBehaviour
 
     void CompleteChallenge()
     {
-        if ( onChallengeCompleted != null)
+        if (onChallengeCompleted != null)
         {
             onChallengeCompleted.Invoke(this);
         }
