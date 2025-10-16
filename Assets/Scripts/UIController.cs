@@ -10,7 +10,6 @@ public class UIController : MonoBehaviour
     [SerializeField] Image settingsPopup;
     [SerializeField] AudioSource music;
     [SerializeField] Slider mouseSensitivitySlider;
-    [SerializeField] Slider yawPitchSlider;
     [SerializeField] Slider volumeSlider;
     
     [SerializeField] private Image volumeImage;
@@ -23,9 +22,16 @@ public class UIController : MonoBehaviour
     [SerializeField] Image helpPopup;
     [SerializeField] Image clock;
 
+    [SerializeField] Image startScreen;
+
+    [SerializeField] Button helpButton;
+    [SerializeField] Button settingsButton;
+    [SerializeField] Image levelImage;
+
     public TMP_Text levelLabel;
     public TMP_Text currentKeyText;
     public TMP_Text timerText;
+    public TMP_Text highScore;
 
     GameObject player;
     GameObject mainCamera;
@@ -37,6 +43,7 @@ public class UIController : MonoBehaviour
         settingsPopup.gameObject.SetActive(false);
         helpPopup.gameObject.SetActive(false);
         clock.gameObject.SetActive(false);
+        progressBar.gameObject.SetActive(false);
 
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
@@ -45,8 +52,14 @@ public class UIController : MonoBehaviour
         volumeSlider.value = AudioListener.volume;
         mouseSensitivitySlider.value = player.GetComponent<MouseLook>().sensitivityHor;
 
-        // set the slider value to the player's speed
-        //agent = player.GetComponent<NavMeshAgent>();
+        helpButton.gameObject.SetActive(false);
+        settingsButton.gameObject.SetActive(false);
+        levelImage.gameObject.SetActive(false);
+
+        player.GetComponent<FPSInput>().enabled = false;
+        player.GetComponent<MouseLook>().enabled = false;
+        mainCamera.GetComponent<MouseLook>().enabled = false;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     // Update is called once per frame
@@ -99,11 +112,6 @@ public class UIController : MonoBehaviour
         player.GetComponent<MouseLook>().sensitivityVert = mouseSensitivitySlider.value;
         mainCamera.GetComponent<MouseLook>().sensitivityHor = mouseSensitivitySlider.value;
         mainCamera.GetComponent<MouseLook>().sensitivityVert = mouseSensitivitySlider.value;
-    }
-    public void OnYawPitchChange()
-    {
-        // change the yaw/pitch setting
-        //agent.speed = speedSlider.value;
     }
     public void OnVolumeChange()
     {
@@ -166,5 +174,31 @@ public class UIController : MonoBehaviour
     {
         if (clock != null)
             clock.gameObject.SetActive(show);
+    }
+
+    public void OnStartGame()
+    {
+        startScreen.gameObject.SetActive(false);
+        helpButton.gameObject.SetActive(true);
+        settingsButton.gameObject.SetActive(true);
+        levelImage.gameObject.SetActive(true);
+        progressBar.gameObject.SetActive(true);
+
+        player.GetComponent<FPSInput>().enabled = true;
+        player.GetComponent<MouseLook>().enabled = true;
+        mainCamera.GetComponent<MouseLook>().enabled = true;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    public void UpdateHighScore(string score)
+    {
+        if (highScore != null)
+            highScore.text = score;
+    }
+
+    public void OnRestartGame()
+    {
+        Start();
+        startScreen.gameObject.SetActive(true);
     }
 }
