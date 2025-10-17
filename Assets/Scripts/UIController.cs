@@ -24,6 +24,8 @@ public class UIController : MonoBehaviour
 
     [SerializeField] Image startScreen;
 
+    [SerializeField] Image leaderboardScreen;
+
     [SerializeField] Button helpButton;
     [SerializeField] Button settingsButton;
     [SerializeField] Image levelImage;
@@ -45,6 +47,10 @@ public class UIController : MonoBehaviour
         clock.gameObject.SetActive(false);
         progressBar.gameObject.SetActive(false);
 
+        // display the start screen and hide the leaderboard screen
+        startScreen.gameObject.SetActive(true);
+        leaderboardScreen.gameObject.SetActive(false);
+
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -52,6 +58,7 @@ public class UIController : MonoBehaviour
         volumeSlider.value = AudioListener.volume;
         mouseSensitivitySlider.value = player.GetComponent<MouseLook>().sensitivityHor;
 
+        // don't display the help and settings buttons and level image
         helpButton.gameObject.SetActive(false);
         settingsButton.gameObject.SetActive(false);
         levelImage.gameObject.SetActive(false);
@@ -199,6 +206,18 @@ public class UIController : MonoBehaviour
     public void OnRestartGame()
     {
         Start();
+        startScreen.gameObject.SetActive(true);
+    }
+
+    public void OnShowLeaderboard()
+    {
+        leaderboardScreen.gameObject.SetActive(true);
+        startScreen.gameObject.SetActive(false);
+    }
+
+    public void OnCloseLeaderboard()
+    {
+        leaderboardScreen.gameObject.SetActive(false);
         startScreen.gameObject.SetActive(true);
     }
 }
