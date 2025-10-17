@@ -11,6 +11,7 @@ public enum Weapon
 public class Shooter : MonoBehaviour
 {
     private Camera cam;     // stores camera component
+    [SerializeField] UIController controller;
 
     public GameObject grenadePrefab;
     public float grenadeImpulse = 5.0f;
@@ -107,6 +108,7 @@ public class Shooter : MonoBehaviour
             target.AddForceAtPosition(impulse, cam.transform.position, ForceMode.Impulse);
 
             grenades -= 1;
+            controller.UpdateGrenadeCount();
         }
     }
 
@@ -168,5 +170,11 @@ public class Shooter : MonoBehaviour
             StopCoroutine(machineGunRoutine);
             machineGunRoutine = null;
         }
+    }
+
+    public void ResetGrenades()
+    {
+        grenades = 0;
+        controller.UpdateGrenadeCount();
     }
 }

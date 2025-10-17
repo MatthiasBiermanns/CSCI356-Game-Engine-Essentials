@@ -12,6 +12,7 @@ public enum WeaponType
 
 public class WeaponPickUp : MonoBehaviour
 {
+    public UIController controller;
     private GameObject shooterCam;
     public WeaponType type;
     public int grenadesToAdd = 5;
@@ -48,6 +49,7 @@ public class WeaponPickUp : MonoBehaviour
                 break;
             case WeaponType.Grenade:
                 shooterComponent.grenades += grenadesToAdd;
+                controller.UpdateGrenadeCount();
                 break;
         }
 

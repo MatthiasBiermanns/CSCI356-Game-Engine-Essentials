@@ -7,6 +7,10 @@ public class SceneController : MonoBehaviour
 {
     [SerializeField] UIController controller;
     [SerializeField] GameObject player;
+    [SerializeField] ChallengeManager tutorialChallengeManager;
+
+    CharacterController characterController;
+
     public Color currentKey = Color.None;
     public int currentLevel = 0;
 
@@ -20,6 +24,8 @@ public class SceneController : MonoBehaviour
         controller.currentKeyText.text = "Current Key: " + Enums.ColorToString(currentKey);
         controller.levelLabel.text = currentLevel.ToString();
         player = GameObject.FindGameObjectWithTag("Player");
+
+        characterController = player.GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -93,23 +99,24 @@ public class SceneController : MonoBehaviour
     {
         controller.OnStartGame();
 
-        CharacterController cc = player.GetComponent<CharacterController>();
-        cc.enabled = false;
+        characterController.enabled = false;
         player.transform.position = new Vector3(-10f, 1f, -3f);
-        cc.enabled = true;
+        characterController.enabled = true;
+        tutorialChallengeManager.enabled = true;
     }
 
     public void OnSkipTutorial()
     {
         controller.OnStartGame();
-        LevelUp();
-        controller.HideProgressBar();
-        controller.ShowTimer(true);
-        
-        CharacterController cc = player.GetComponent<CharacterController>();
-        cc.enabled = false;
+
+        // skip via invoke to not miss any activities
+        tutorialChallengeManager.enabled = true;
+        tutorialChallengeManager.onAllChallengesCompleted.Invoke();
+        tutorialChallengeManager.enabled = false;
+
+        characterController.enabled = false;
         player.transform.position = new Vector3(0f, 1f, 8.5f);
-        cc.enabled = true;
+        characterController.enabled = true;
 
         StartTimer();
     }
@@ -119,6 +126,8 @@ public class SceneController : MonoBehaviour
         controller.OnRestartGame();
         currentLevel = 0;
         controller.levelLabel.text = currentLevel.ToString();
+
+        // TOOD: Alle Challenge Manager zurücksetzen
 
         ResetTimer();
         ResetKeyText();

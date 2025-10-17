@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using UnityEngine.UIElements;
 
 public class Spawner : MonoBehaviour
 {
+    [SerializeField] UIController uiController;
+
     [SerializeField] GameObject simpleKeyPrefab;
     [SerializeField] GameObject detailedKeyPrefab;
     [SerializeField] GameObject grenadePickUpPrefab;
@@ -23,6 +26,11 @@ public class Spawner : MonoBehaviour
     [SerializeField] Vector3 agentSpawnPosition;
     [SerializeField] Transform agentTarget;
 
+    public float respawnDelay = 5.0f;
+    public int grenadesToAdd = 1;
+
+    private GameObject grenadePickUp;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,11 +43,20 @@ public class Spawner : MonoBehaviour
         
     }
 
-    public void SpawnGrenadePickUp(int grenadesToAdd)
+    public void SpawnGrenadePickUp(bool respawn)
     {
         GameObject newGrenadePickUp = Instantiate(grenadePickUpPrefab, grenadePickUpPosition, Quaternion.identity);
-        newGrenadePickUp.GetComponent<WeaponPickUp>().type = WeaponType.Grenade;
-        newGrenadePickUp.GetComponent<WeaponPickUp>().grenadesToAdd = grenadesToAdd;
+        WeaponPickUp wp = newGrenadePickUp.GetComponent<WeaponPickUp>();
+        wp.type = WeaponType.Grenade;
+        wp.grenadesToAdd = grenadesToAdd;
+        wp.controller = uiController;
+
+        grenadePickUp = newGrenadePickUp;
+
+        if (respawn)
+        {
+            StartCoroutine(Respawn(() => SpawnGrenadePickUp(respawn)));
+        }
     }
 
     public void SpawnKey(string color)
@@ -91,5 +108,16 @@ public class Spawner : MonoBehaviour
     {
         NavMeshAgent newAgent = Instantiate(agentPrefab, agentSpawnPosition, Quaternion.identity);
         newAgent.SetDestination(agentTarget.position);
+    }
+
+    IEnumerator Respawn(Action respawnFunction)
+    {
+        while(grenadePickUp != null)
+        {
+            yield return new WaitForSeconds(1.0f);
+        }
+        yield return new WaitForSeconds(respawnDelay);
+
+        respawnFunction();
     }
 }

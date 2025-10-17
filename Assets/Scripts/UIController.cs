@@ -30,10 +30,16 @@ public class UIController : MonoBehaviour
     [SerializeField] Button settingsButton;
     [SerializeField] Image levelImage;
 
+    [SerializeField] Image doubleJumpActive;
+    [SerializeField] Image doubleJumpInactive;
+    [SerializeField] Image grapplingHookActive;
+    [SerializeField] Image grapplingHookInactive;
+
     public TMP_Text levelLabel;
     public TMP_Text currentKeyText;
     public TMP_Text timerText;
     public TMP_Text highScore;
+    public TMP_Text grenadeCounterText;
 
     GameObject player;
     GameObject mainCamera;
@@ -90,6 +96,9 @@ public class UIController : MonoBehaviour
         player.GetComponent<FPSInput>().enabled = true;
         player.GetComponent<MouseLook>().enabled = true;
         mainCamera.GetComponent<MouseLook>().enabled = true;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void OnOpenSettings()
@@ -110,6 +119,9 @@ public class UIController : MonoBehaviour
     public void OnCloseHelp()
     {
         helpPopup.gameObject.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void OnMouseSensitivityChange()
@@ -219,5 +231,39 @@ public class UIController : MonoBehaviour
     {
         leaderboardScreen.gameObject.SetActive(false);
         startScreen.gameObject.SetActive(true);
+    }
+
+    public void UpdateGrenadeCount()
+    {
+        Debug.Log(mainCamera.GetComponent<Shooter>().grenades);
+        grenadeCounterText.text = mainCamera.GetComponent<Shooter>().grenades.ToString();
+    }
+
+    public void SwitchDoubleJumpActive(bool active)
+    {
+        bool activeImageValue = true;
+        bool inactiveImageValue = false;
+        if (!active)
+        {
+            activeImageValue = false;
+            inactiveImageValue = true;
+        }
+
+        doubleJumpActive.enabled = activeImageValue;
+        doubleJumpInactive.enabled = inactiveImageValue;
+    }
+
+    public void SwitchGrapplingHookActive(bool active)
+    {
+        bool activeImageValue = true;
+        bool inactiveImageValue = false;
+        if (!active)
+        {
+            activeImageValue = false;
+            inactiveImageValue = true;
+        }
+
+        grapplingHookActive.enabled = activeImageValue;
+        grapplingHookInactive.enabled = inactiveImageValue;
     }
 }

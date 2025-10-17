@@ -322,7 +322,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d234e81a6d83ea4cb51ac2e01d73489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
   type: 2
+  grenadesToAdd: 5
 --- !u!114 &4208356444947680466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,6 +337,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5cee9e24078344f925eb6caac79162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bobAmplitude: 0.15
+  bobFrequency: 0.8
+  rotationSpeed: 35
 --- !u!1 &1621577602997590414
 GameObject:
   m_ObjectHideFlags: 0
