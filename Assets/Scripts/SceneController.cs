@@ -19,7 +19,7 @@ public class SceneController : MonoBehaviour
     private bool timerRunning = false;
     private float elapsedTime = 0f;
 
-    public List<ScoreEntry> bestScores = new List<ScoreEntry>();
+    private List<ScoreEntry> bestScores = new List<ScoreEntry>();
     private int maxBestScores = 5;
 
     public struct ScoreEntry
@@ -105,9 +105,8 @@ public class SceneController : MonoBehaviour
     public void ResetHighScore()
     {
         highScore = 0f;
-        controller.UpdateHighScore(highScore);
         bestScores.Clear();
-        controller.UpdateLeaderboard(bestScores);
+        controller.ResetScores();
     }
 
     public void OnStartGame()
@@ -153,7 +152,7 @@ public class SceneController : MonoBehaviour
 
         ScoreEntry entry = new ScoreEntry(name, score);
         bestScores.Add(entry);
-        bestScores.OrderBy(s => s.score).ToList();
+        bestScores = bestScores.OrderBy(s => s.score).ToList();
         if (bestScores.Count > maxBestScores)
         {
             bestScores.RemoveAt(bestScores.Count - 1);

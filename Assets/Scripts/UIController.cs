@@ -40,13 +40,15 @@ public class UIController : MonoBehaviour
     public TMP_Text levelLabel;
     public TMP_Text currentKeyText;
     public TMP_Text timerText;
-    public TMP_Text highScore;
+    public TMP_Text highScoreStartScreen;
+    public TMP_Text highScoreEndScreen;
     public TMP_Text grenadeCounterText;
 
     public TMP_Text[] leaderboardNames;
     public TMP_Text[] leaderboardScores;
     public TMP_InputField playerNameInput;
     private bool scoreSaved = false;
+    private bool fromEndScreen = false;
 
     GameObject player;
     GameObject mainCamera;
@@ -64,6 +66,9 @@ public class UIController : MonoBehaviour
         startScreen.gameObject.SetActive(true);
         leaderboardScreen.gameObject.SetActive(false);
         endScreen.gameObject.SetActive(false);
+
+        // reset leaderboard at start
+        UpdateLeaderboard(new List<SceneController.ScoreEntry>());
 
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
@@ -230,14 +235,16 @@ public class UIController : MonoBehaviour
 
     public void UpdateHighScore(float score)
     {
-        if (highScore == null)
+        if (highScoreStartScreen == null || highScoreEndScreen == null)
             return;
         if (score <= 0f)
         {
-            highScore.text = "--:--";
+            highScoreStartScreen.text = "--:--";
+            highScoreEndScreen.text = "--:--";
             return;
         }
-        highScore.text = FormatTime(score);
+        highScoreStartScreen.text = FormatTime(score);
+        highScoreEndScreen.text = FormatTime(score);
     }
 
     public void OnRestartGame()
@@ -251,9 +258,22 @@ public class UIController : MonoBehaviour
         startScreen.gameObject.SetActive(false);
     }
 
+    public void OnShowLeaderboardFromEndScreen()
+    {
+        fromEndScreen = true;
+        leaderboardScreen.gameObject.SetActive(true);
+        endScreen.gameObject.SetActive(false);
+    }
+
     public void OnCloseLeaderboard()
     {
         leaderboardScreen.gameObject.SetActive(false);
+        if (fromEndScreen)
+        {
+            endScreen.gameObject.SetActive(true);
+            fromEndScreen = false;
+            return;
+        }
         startScreen.gameObject.SetActive(true);
     }
 
@@ -297,6 +317,8 @@ public class UIController : MonoBehaviour
         {
             if (i < bestScores.Count)
             {
+                if (!leaderboardNames[i].gameObject.activeSelf)
+                    leaderboardNames[i].gameObject.SetActive(true);
                 leaderboardNames[i].text = (i + 1) + ". " + bestScores[i].playerName;
                 leaderboardScores[i].text = FormatTime(bestScores[i].score);
             }
@@ -318,7 +340,6 @@ public class UIController : MonoBehaviour
             playerName = "Player";
         }
         sceneController.SaveScore(playerName);
-        playerNameInput.gameObject.SetActive(false);
         scoreSaved = true;
     }
 
@@ -346,6 +367,13 @@ public class UIController : MonoBehaviour
     {
         sceneController.StopTimer();
         endScreen.gameObject.SetActive(true);
+        scoreSaved = false;
+    }
+
+    public void ResetScores()
+    {
+        UpdateLeaderboard(new List<SceneController.ScoreEntry>());
+        UpdateHighScore(0f);
         scoreSaved = false;
     }
 }
