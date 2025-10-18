@@ -17,6 +17,7 @@ public class FPSInput : MonoBehaviour
     private bool doubleJumpUsed = false;
 
     public float pushForce = 2.0f;
+    public bool doubleJumpActivated = true;
 
     // input + gravity
     private Vector3 baseVelocity = Vector3.zero;
@@ -39,7 +40,7 @@ public class FPSInput : MonoBehaviour
         // make diagonal movement consistent
         movement = Vector3.ClampMagnitude(movement, speed);
 
-        if (charController.isGrounded || doubleJumpUsed == false)
+        if (charController.isGrounded || (doubleJumpUsed == false && doubleJumpActivated))
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {

@@ -7,55 +7,52 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(LineRenderer))]
 
+// set execution after all scripts except fps
 [DefaultExecutionOrder(1000)]
 public class GrapplingHook : MonoBehaviour
 {
-    [Header("References")]
+    // references
     [SerializeField] private Camera cam;
-    [SerializeField] private Transform ropeStart;      // z.B. Waffenmündung; sonst Kamera
+    [SerializeField] private Transform ropeStart;
     [SerializeField] private LineRenderer line;
     [SerializeField]private FPSInput fps;
 
-    [Header("Input")]
     [SerializeField] private KeyCode fireToggleKey = KeyCode.F;
     [SerializeField] private KeyCode reelInKey = KeyCode.P;
 
-    [Header("Grapple Settings")]
+    // grapple settings
     [SerializeField] private LayerMask grappleMask = ~0;
     [SerializeField] private float maxRayDistance = 30f;
-    [SerializeField] private float minRopeLength = 1.25f;   // unter diese Länge reelst du nicht
-    [SerializeField] private float ropeLengthBuffer = 0.05f;   // unter diese Länge reelst du nicht
-    [SerializeField] private float reelInSpeed = 12f;     // m/s Seilverkürzung
-    [SerializeField] private float tautEpsilon = 0.02f;   // Toleranz, wann “straff”
+    [SerializeField] private float minRopeLength = 1.25f;
+    [SerializeField] private float ropeLengthBuffer = 0.05f;
+    [SerializeField] private float reelInSpeed = 12f;
+    [SerializeField] private float tautEpsilon = 0.02f;
 
-    [Header("Pull Dynamics (CharacterController)")]
-    [SerializeField] private float pullSpring = 45f;     // Federstärke (nur entlang Seil)
-    [SerializeField] private float pullDamping = 8f;      // Dämpfung (nur entlang Seil)
-    [SerializeField] private float maxPullSpeed = 20f;     // cap der Zuggeschwindigkeit
+    // pull character
+    [SerializeField] private float pullSpring = 45f;
+    [SerializeField] private float pullDamping = 8f;
+    [SerializeField] private float maxPullSpeed = 20f;
 
-    [Header("Target Rigidbody Pull (optional)")]
-    [SerializeField] private bool pullRigidbodies = true;
-    [SerializeField] private float targetSpring = 30f;     // Feder fürs Ziel (nur entlang Seil)
-    [SerializeField] private float targetDamper = 6f;      // Dämpfung fürs Ziel
-    [SerializeField] private float maxTargetAccel = 40f;     // m/s^2 cap
-    [SerializeField] private float maxTargetSpeed = 12f;     // m/s cap (nur entlang Seil)
+    // pull rigidbody
+    [SerializeField] float maxTargetAccel = 40f;
+    [SerializeField] float maxTargetSpeed = 12f;
 
-    [Header("Rope Visuals")]
-    [SerializeField] private int ropeSegments = 24;
-    [SerializeField] private float sagSmooth = 16f;     // visuelle Glättung
-    [SerializeField] private float ropeWidth = 0.05f;
+    // rope rendering
+    [SerializeField] int ropeSegments = 24;
+    [SerializeField] float sagSmooth = 16f;
+    [SerializeField] float ropeWidth = 0.05f;
 
     private CharacterController controller;
 
     // Rope state
     private bool isGrappling;
-    private float ropeLength;                 // feste Länge; ändert sich nur beim Reel-In
-    private Vector3 anchorWorld;               // falls kein RB
-    private Rigidbody targetRb;                // RB wenn vorhanden
-    private Vector3 targetLocalAnchor;        // lokaler Anker im Ziel-RB
+    private float ropeLength;
+    private Vector3 anchorWorld; // if target no rb
+    private Rigidbody targetRb;
+    private Vector3 targetLocalAnchor;
 
-    // Player pull (nur Grapple-Anteil)
-    private Vector3 pullVelocity;              // NUR entlang/nah der Seilrichtung verändern
+    // Player pull
+    private Vector3 pullVelocity;
 
     // rendering
     private Vector3[] ropePts;
@@ -66,10 +63,13 @@ public class GrapplingHook : MonoBehaviour
         controller = GetComponent<CharacterController>();
         fps = GetComponent<FPSInput>();
 
+        // line renderer
         line.useWorldSpace = true;
         line.widthMultiplier = ropeWidth;
         line.positionCount = Mathf.Max(ropeSegments, 8);
         ropePts = new Vector3[line.positionCount];
+
+        // disable line
         line.enabled = false;
     }
 
@@ -83,76 +83,85 @@ public class GrapplingHook : MonoBehaviour
 
         if (!isGrappling) return;
 
-        // 1) Anchor updaten (folgt RB, falls vorhanden)
+        // update rope anchors
         Vector3 start = ropeStart.position;
         Vector3 anchor = GetAnchorWorld();
         Vector3 toAnchor = anchor - start;
-        float dist = toAnchor.magnitude;
+        float distance = toAnchor.magnitude;
 
-        // 2) Reel-In: Seillänge nur hier (pro Frame) verkürzen
+        // shorten rope
         if (Input.GetKey(reelInKey))
             ropeLength = Mathf.Max(ropeLength - reelInSpeed * Time.deltaTime, minRopeLength);
 
-        // 3) Zug nur wenn straff
-        bool taut = dist > ropeLength + tautEpsilon;
+        // check if rope is taut --> creates pull
+        bool taut = distance > ropeLength + tautEpsilon;
 
-        // ACHSENSAUBER: alles auf der Seilachse rechnen
-        Vector3 dir = dist > 1e-5f ? (toAnchor / dist) : Vector3.zero;
+        // calculate pull direction
+        Vector3 pullDirection = distance > 1e-4f ? (toAnchor / distance) : Vector3.zero;
 
-        // --- Spieler-Zug (nur ent/along Seil) ---
-        // projiziere die aktuelle pullVelocity auf die Seilachse
-        float vAlong = Vector3.Dot(pullVelocity, dir);
+        // projection on rope axis
+        float velocityAlongRope = Vector3.Dot(pullVelocity, pullDirection);
 
         if (taut)
         {
-            float stretch = dist - ropeLength;                  // > 0
-            float accelAlong = pullSpring * stretch - pullDamping * vAlong;
-            // integriere NUR entlang der Seilachse
-            pullVelocity += dir * (accelAlong * Time.deltaTime);
+            float stretch = distance - ropeLength;
 
-            // cap nur entlang der Achse
-            float newAlong = Mathf.Clamp(Vector3.Dot(pullVelocity, dir), -maxPullSpeed, maxPullSpeed);
-            // setze die Along-Komponente; erhalte die orthogonale Komponente (klein)
-            pullVelocity = (pullVelocity - dir * Vector3.Dot(pullVelocity, dir)) + dir * newAlong;
+            // calculate accelleration (hooks law)
+            float accellerationAlongRope = pullSpring * stretch - pullDamping * velocityAlongRope;
+            
+            // calculate actual, frame indipendent pull 
+            pullVelocity += pullDirection * (accellerationAlongRope * Time.deltaTime);
+
+            // avoid explosion by clamping
+            float newVelocityAlongRope = Mathf.Clamp(Vector3.Dot(pullVelocity, pullDirection), -maxPullSpeed, maxPullSpeed);
+            
+            // recalculate
+            // remove old velocityAlongRope and add clamped one
+            pullVelocity = (pullVelocity - pullDirection * velocityAlongRope) + pullDirection * newVelocityAlongRope;
         }
         else
         {
-            // wenn locker: along-Komponente sanft abbauen
-            float decay = Mathf.Min(Mathf.Abs(vAlong), pullDamping * Time.deltaTime * 2f);
-            pullVelocity -= dir * Mathf.Sign(vAlong) * decay;
+            // rope is loose
+
+            // slowly decay pull
+            float decay = Mathf.Min(Mathf.Abs(velocityAlongRope), pullDamping * Time.deltaTime * 2f);
+            pullVelocity -= pullDirection * Mathf.Sign(velocityAlongRope) * decay;
         }
 
-        // 5) Ziel-Rigidbody nur bei Spannung ziehen – streng ent/along Achse, gedämpft & gecappt
-        if (pullRigidbodies && targetRb != null && !targetRb.isKinematic && taut)
+        // pull rigidbody
+        if (targetRb != null && !targetRb.isKinematic && taut)
         {
-            // Geschwindigkeit des Ziels entlang der Zugrichtung (zum Spieler hin)
-            float vTargetAlong = Vector3.Dot(targetRb.velocity, -dir); // -dir zeigt zum Spieler
+            // calculate velocity along rope for target
+            float velocityTargetAlongRope = Vector3.Dot(targetRb.velocity, -pullDirection);
 
-            float tStretch = dist - ropeLength; // > 0
-            float a = targetSpring * tStretch - targetDamper * vTargetAlong; // gewünschte Beschl.
+            float targetStretch = distance - ropeLength;
+            float accellerationAlongRopeTarget = pullSpring * targetStretch - pullDamping * velocityTargetAlongRope;
 
-            a = Mathf.Clamp(a, -maxTargetAccel, maxTargetAccel);
-            targetRb.AddForce(-dir * a, ForceMode.Acceleration);
+            // clamp accellaration to avoid explosion
+            accellerationAlongRopeTarget = Mathf.Clamp(accellerationAlongRopeTarget, -maxTargetAccel, maxTargetAccel);
+            targetRb.AddForce(-pullDirection * accellerationAlongRopeTarget, ForceMode.Acceleration);
 
-            // Speed-Cap entlang der Achse
-            float vAfter = Vector3.Dot(targetRb.velocity, -dir);
-            if (vAfter > maxTargetSpeed)
+            // apply speed limit
+            float velocityAfter = Vector3.Dot(targetRb.velocity, -pullDirection);
+            if (velocityAfter > maxTargetSpeed)
             {
-                float excess = vAfter - maxTargetSpeed;
-                // reduziere nur die along-Komponente
-                targetRb.velocity += dir * excess; // da vAlong auf -dir war
+                float excess = velocityAfter - maxTargetSpeed;
+
+                // remove excess
+                // -pullDirection is target direction --> pullDirection negates this
+                targetRb.velocity += pullDirection * excess;
             }
         }
 
-        // 6) Render (längengetreu, Anchor folgt)
-        RenderRope(start, anchor, dist);
+        // render rope
+        RenderRope(start, anchor, distance);
     }
 
     private void LateUpdate()
     {
         if (fps != null && isGrappling)
         {
-            // Wenn das Seil straff ist, Gravitation aussetzen
+            // if rope is taut, negate gravity
             bool ropeTaut = Vector3.Distance(
                 (ropeStart ? ropeStart.position : cam.transform.position),
                 GetAnchorWorld()
@@ -160,7 +169,7 @@ public class GrapplingHook : MonoBehaviour
 
             fps.suspendGravity = ropeTaut;
 
-            // additiv die Grapple-Velocity übergeben
+            // transfer grappling velocity to fps
             fps.externalVelocity += pullVelocity;
         }
     }
@@ -170,6 +179,7 @@ public class GrapplingHook : MonoBehaviour
         Vector3 center = new Vector3(cam.pixelWidth / 2f, cam.pixelHeight / 2f, 0f);
         Ray ray = cam.ScreenPointToRay(center);
 
+        // check if something hit
         if (!Physics.Raycast(ray, out RaycastHit hit, maxRayDistance, grappleMask, QueryTriggerInteraction.Ignore))
             return;
 
@@ -177,16 +187,20 @@ public class GrapplingHook : MonoBehaviour
         pullVelocity = Vector3.zero;
         currentSag = 0f;
 
+        // apply buffer
         ropeLength = Vector3.Distance(transform.position, hit.point) * (1.0f + ropeLengthBuffer);
 
+
         targetRb = hit.rigidbody;
+        
+        // if rb hit, work with localAnchor
         if (targetRb != null)
         {
             targetLocalAnchor = targetRb.transform.InverseTransformPoint(hit.point);
         }
         else
         {
-            anchorWorld = hit.point; // Weltpunkt bleibt fix
+            anchorWorld = hit.point;
         }
 
         line.enabled = true;
@@ -210,11 +224,11 @@ public class GrapplingHook : MonoBehaviour
         return anchorWorld;
     }
 
-    // ---------- Rope Rendering: Kurve mit passender Länge ----------
     void RenderRope(Vector3 start, Vector3 end, float currentDist)
     {
         float slack = Mathf.Max(0f, ropeLength - currentDist);
 
+        // calculate approximate sag of rope
         // L ? d + (8*h^2)/(3*d)  =>  h = sqrt( (3*d*slack)/8 )
         float targetSag = 0f;
         if (currentDist > 1e-4f && slack > 0f)
@@ -223,34 +237,35 @@ public class GrapplingHook : MonoBehaviour
         float lerp = 1f - Mathf.Exp(-sagSmooth * Time.deltaTime);
         currentSag = Mathf.Lerp(currentSag, targetSag, lerp);
 
+        // calculate using bezier
         BuildBezierWithSag(start, end, currentSag, ropePts);
         line.positionCount = ropePts.Length;
         line.SetPositions(ropePts);
     }
 
-    void BuildBezierWithSag(Vector3 start, Vector3 end, float h, Vector3[] buf)
+    void BuildBezierWithSag(Vector3 startPosition, Vector3 endPosition, float sagHeigth, Vector3[] ropePoints)
     {
-        Vector3 dir = end - start;
-        float d = dir.magnitude;
-        if (d < 1e-5f)
+        Vector3 direction = endPosition - startPosition;
+        float distance = direction.magnitude;
+        if (distance < 1e-5f)
         {
-            for (int i = 0; i < buf.Length; i++) buf[i] = start;
+            for (int i = 0; i < ropePoints.Length; i++) ropePoints[i] = startPosition;
             return;
         }
 
-        Vector3 forward = dir / d;
+        Vector3 forward = direction / distance;
         Vector3 gravity = Physics.gravity.sqrMagnitude > 0 ? Physics.gravity.normalized : Vector3.down;
         Vector3 down = Vector3.ProjectOnPlane(gravity, forward).normalized;
         if (down.sqrMagnitude < 1e-6f) down = Vector3.up;
 
-        Vector3 mid = (start + end) * 0.5f;
-        Vector3 ctrl = mid + down * h;
+        Vector3 mid = (startPosition + endPosition) * 0.5f;
+        Vector3 ctrl = mid + down * sagHeigth;
 
-        int n = buf.Length;
+        int n = ropePoints.Length;
         for (int i = 0; i < n; i++)
         {
             float t = i / (n - 1f);
-            buf[i] = (1 - t) * (1 - t) * start + 2 * (1 - t) * t * ctrl + t * t * end;
+            ropePoints[i] = (1 - t) * (1 - t) * startPosition + 2 * (1 - t) * t * ctrl + t * t * endPosition;
         }
     }
 }
