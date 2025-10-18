@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 public class SceneController : MonoBehaviour
 {
-    [SerializeField] UIController controller;
+    [SerializeField] private UIController controller;
     [SerializeField] GameObject player;
     [SerializeField] ChallengeManager tutorialChallengeManager;
 
@@ -17,6 +18,20 @@ public class SceneController : MonoBehaviour
     public float highScore = 0f;
     private bool timerRunning = false;
     private float elapsedTime = 0f;
+
+    public List<ScoreEntry> bestScores = new List<ScoreEntry>();
+    private int maxBestScores = 5;
+
+    public struct ScoreEntry
+    {
+        public string playerName;
+        public float score;
+        public ScoreEntry(string name, float score)
+        {
+            this.playerName = name;
+            this.score = score;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +49,7 @@ public class SceneController : MonoBehaviour
         if (timerRunning)
         {
             elapsedTime += Time.deltaTime;
-            controller.UpdateTimerText(FormatTime(elapsedTime));
+            controller.UpdateTimerText(elapsedTime);
         }
     }
     public void PickUpKey(Color key)
@@ -64,18 +79,16 @@ public class SceneController : MonoBehaviour
         timerRunning = false;
     }
 
+    public void ResumeTimer()
+    {
+        timerRunning = true;
+    }
+
     public void ResetTimer()
     {
         elapsedTime = 0f;
-        controller.UpdateTimerText(FormatTime(elapsedTime));
+        controller.UpdateTimerText(elapsedTime);
         timerRunning = false;
-    }
-
-    private string FormatTime(float time)
-    {
-        int minutes = Mathf.FloorToInt(time / 60f);
-        int seconds = Mathf.FloorToInt(time % 60f);
-        return $"{minutes:00}:{seconds:00}";
     }
 
     public float GetElapsedTime()
@@ -86,13 +99,15 @@ public class SceneController : MonoBehaviour
     public void SetHighScore(float score)
     {
         highScore = score;
-        controller.UpdateHighScore(FormatTime(highScore));
+        controller.UpdateHighScore(highScore);
     }
 
     public void ResetHighScore()
     {
         highScore = 0f;
-        controller.UpdateHighScore("--:--");
+        controller.UpdateHighScore(highScore);
+        bestScores.Clear();
+        controller.UpdateLeaderboard(bestScores);
     }
 
     public void OnStartGame()
@@ -127,9 +142,31 @@ public class SceneController : MonoBehaviour
         currentLevel = 0;
         controller.levelLabel.text = currentLevel.ToString();
 
-        // TOOD: Alle Challenge Manager zurücksetzen
-
         ResetTimer();
         ResetKeyText();
     }
+
+    private void AddBestScore(string name, float score)
+    {
+        if (score <= 0f)
+            return;
+
+        ScoreEntry entry = new ScoreEntry(name, score);
+        bestScores.Add(entry);
+        bestScores.OrderBy(s => s.score).ToList();
+        if (bestScores.Count > maxBestScores)
+        {
+            bestScores.RemoveAt(bestScores.Count - 1);
+        }
+
+        SetHighScore(bestScores[0].score);
+        controller.UpdateLeaderboard(bestScores);
+    }
+
+    public void SaveScore(string name)
+    {
+        AddBestScore(name, elapsedTime);
+    }
+
+
 }

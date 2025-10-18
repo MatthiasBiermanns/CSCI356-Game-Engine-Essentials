@@ -7,10 +7,12 @@ using UnityEngine.AI;
 
 public class UIController : MonoBehaviour
 {
-    [SerializeField] Image settingsPopup;
-    [SerializeField] AudioSource music;
-    [SerializeField] Slider mouseSensitivitySlider;
-    [SerializeField] Slider volumeSlider;
+    [SerializeField] private SceneController sceneController;
+
+    [SerializeField] private Image settingsPopup;
+    [SerializeField] private AudioSource music;
+    [SerializeField] private Slider mouseSensitivitySlider;
+    [SerializeField] private Slider volumeSlider;
     
     [SerializeField] private Image volumeImage;
     [SerializeField] private Sprite volumeOnSprite;
@@ -19,27 +21,32 @@ public class UIController : MonoBehaviour
     [SerializeField] private Image progressFill;
     [SerializeField] private Image progressBar;
 
-    [SerializeField] Image helpPopup;
-    [SerializeField] Image clock;
+    [SerializeField] private Image helpPopup;
+    [SerializeField] private Image clock;
 
-    [SerializeField] Image startScreen;
+    [SerializeField] private Image startScreen;
+    [SerializeField] private Image leaderboardScreen;
+    [SerializeField] private Image endScreen;
 
-    [SerializeField] Image leaderboardScreen;
+    [SerializeField] private Button helpButton;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private Image levelImage;
 
-    [SerializeField] Button helpButton;
-    [SerializeField] Button settingsButton;
-    [SerializeField] Image levelImage;
-
-    [SerializeField] Image doubleJumpActive;
-    [SerializeField] Image doubleJumpInactive;
-    [SerializeField] Image grapplingHookActive;
-    [SerializeField] Image grapplingHookInactive;
+    [SerializeField] private Image doubleJumpActive;
+    [SerializeField] private Image doubleJumpInactive;
+    [SerializeField] private Image grapplingHookActive;
+    [SerializeField] private Image grapplingHookInactive;
 
     public TMP_Text levelLabel;
     public TMP_Text currentKeyText;
     public TMP_Text timerText;
     public TMP_Text highScore;
     public TMP_Text grenadeCounterText;
+
+    public TMP_Text[] leaderboardNames;
+    public TMP_Text[] leaderboardScores;
+    public TMP_InputField playerNameInput;
+    private bool scoreSaved = false;
 
     GameObject player;
     GameObject mainCamera;
@@ -53,9 +60,10 @@ public class UIController : MonoBehaviour
         clock.gameObject.SetActive(false);
         progressBar.gameObject.SetActive(false);
 
-        // display the start screen and hide the leaderboard screen
+        // display the start screen and hide the other screens
         startScreen.gameObject.SetActive(true);
         leaderboardScreen.gameObject.SetActive(false);
+        endScreen.gameObject.SetActive(false);
 
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
@@ -99,6 +107,8 @@ public class UIController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        sceneController.ResumeTimer();
     }
 
     public void OnOpenSettings()
@@ -110,6 +120,8 @@ public class UIController : MonoBehaviour
         player.GetComponent<FPSInput>().enabled = false;
         player.GetComponent<MouseLook>().enabled = false;
         mainCamera.GetComponent<MouseLook>().enabled = false;
+
+        sceneController.StopTimer();
     }
 
     public void OnOpenHelp()
@@ -183,10 +195,17 @@ public class UIController : MonoBehaviour
         StartCoroutine(VanishProgressBar());
     }
 
-    public void UpdateTimerText(string text)
+    public void UpdateTimerText(float time)
     {
         if (timerText != null)
-            timerText.text = text;
+            timerText.text = FormatTime(time);
+    }
+
+    private string FormatTime(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60f);
+        int seconds = Mathf.FloorToInt(time % 60f);
+        return $"{minutes:00}:{seconds:00}";
     }
 
     public void ShowTimer(bool show = true)
@@ -209,16 +228,21 @@ public class UIController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void UpdateHighScore(string score)
+    public void UpdateHighScore(float score)
     {
-        if (highScore != null)
-            highScore.text = score;
+        if (highScore == null)
+            return;
+        if (score <= 0f)
+        {
+            highScore.text = "--:--";
+            return;
+        }
+        highScore.text = FormatTime(score);
     }
 
     public void OnRestartGame()
     {
         Start();
-        startScreen.gameObject.SetActive(true);
     }
 
     public void OnShowLeaderboard()
@@ -265,5 +289,63 @@ public class UIController : MonoBehaviour
 
         grapplingHookActive.enabled = activeImageValue;
         grapplingHookInactive.enabled = inactiveImageValue;
+    }
+
+    public void UpdateLeaderboard(List<SceneController.ScoreEntry> bestScores)
+    {
+        for (int i = 0; i < leaderboardNames.Length; i++)
+        {
+            if (i < bestScores.Count)
+            {
+                leaderboardNames[i].text = (i + 1) + ". " + bestScores[i].playerName;
+                leaderboardScores[i].text = FormatTime(bestScores[i].score);
+            }
+            else
+            {
+                leaderboardNames[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void OnSaveScore()
+    {
+        if (scoreSaved) return;
+
+        string playerName = playerNameInput.text;
+        playerName = Sanitize(playerName);
+        if (string.IsNullOrEmpty(playerName))
+        {
+            playerName = "Player";
+        }
+        sceneController.SaveScore(playerName);
+        playerNameInput.gameObject.SetActive(false);
+        scoreSaved = true;
+    }
+
+    private string Sanitize(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+        {
+            return input;
+        }
+
+        input = input.Trim(); // remove leading and trailing whitespace
+        char[] invalidChars = { '<', '>', '/', '\\', '|', ':', '"', '?', '*', '&' };
+        foreach (char c in invalidChars)
+        {
+            input = input.Replace(c.ToString(), ""); // remove invalid characters
+        }
+        if (input.Length > 16)
+        {
+            input = input.Substring(0, 16); // limit length to 16 characters
+        }
+        return input;
+    }
+
+    public void OnShowEndScreen()
+    {
+        sceneController.StopTimer();
+        endScreen.gameObject.SetActive(true);
+        scoreSaved = false;
     }
 }
