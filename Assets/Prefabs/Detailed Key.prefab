@@ -166,6 +166,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5cee9e24078344f925eb6caac79162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bobAmplitude: 0.15
+  bobFrequency: 0.8
+  rotationSpeed: 35
 --- !u!1 &7046742587490673797
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,8 +213,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0.7137238, g: 0.91584826, b: 0.9528302, a: 1}
-  m_Intensity: 2
-  m_Range: 1
+  m_Intensity: 5
+  m_Range: 2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
