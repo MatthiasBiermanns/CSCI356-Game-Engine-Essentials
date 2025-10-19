@@ -110,6 +110,8 @@ public class UIController : MonoBehaviour
         for (int i = 0; i < showHelpTexts.Length; i++) { 
             showHelpTexts[i] = false; 
         }
+
+        playerHint.enabled = false;
     }
 
     // Update is called once per frame
@@ -121,6 +123,11 @@ public class UIController : MonoBehaviour
             // unlock and display the cursor
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) && playerHint.text == "Press T to use your torch")
+        {
+            SetPlayerHintEnabled(false);
         }
     }
 
@@ -284,6 +291,9 @@ public class UIController : MonoBehaviour
         mainCamera.GetComponent<MouseLook>().enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
         SetShowCrosshair(true);
+
+        SetPlayerHint("Press T to use your torch");
+        SetPlayerHintEnabled(true);
     }
 
     public void UpdateHighScore(float score)
