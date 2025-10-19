@@ -36,15 +36,12 @@ public class ChallengeManager : MonoBehaviour
             {
                 challenge.isActive = true;
             }
-            
-            if (!challenge.getIsCompleted())
-            {
-                challenge.onChallengeCompleted.AddListener(OnChallengeCompleted);
 
-                if (challenge.canUncomplete)
-                {
-                    challenge.onChallengeUncompleted.AddListener(OnChallengeUncompleted);
-                }
+            challenge.onChallengeCompleted.AddListener(OnChallengeCompleted);
+
+            if (challenge.canUncomplete)
+            {
+                challenge.onChallengeUncompleted.AddListener(OnChallengeUncompleted);
             }
         }
 
@@ -55,6 +52,8 @@ public class ChallengeManager : MonoBehaviour
             // invoke, to not cause issues
             onAllChallengesCompleted.Invoke();
         }
+
+        SetupHelpTexts();
     }
 
     // Update is called once per frame
@@ -90,7 +89,7 @@ public class ChallengeManager : MonoBehaviour
         Debug.Log($"ChallengeManager: Remaining challenges: {remainingChallenges}");
 
         UpdateProgressUi();
-
+        UpdateHelpTextStati();
 
         if (!intermediateTriggered)
         {
@@ -139,6 +138,7 @@ public class ChallengeManager : MonoBehaviour
         remainingChallenges = GetRemainingChallenges();
         Debug.Log($"ChallengeManager: Remaining challenges: {remainingChallenges}");
         UpdateProgressUi();
+        UpdateHelpTextStati();
     }
 
     void UpdateProgressUi()
@@ -149,5 +149,59 @@ public class ChallengeManager : MonoBehaviour
     int GetRemainingChallenges()
     {
         return challenges.Length - challenges.Count((Challenge c) => c.getIsCompleted());
+    }
+
+    void SetupHelpTexts()
+    {
+        Debug.Log("ChallengeManager: " + uiController.helpTexts.Length);
+        for (int i = 0; i < uiController.helpTexts.Length; i++)
+        { 
+            // if less challenges then help text space, disable help text
+            if (i >= challenges.Length)
+            {
+                Debug.Log("ChallengeManager: disable help text: " + i.ToString());
+                uiController.SetShowHelpText(i, false);
+                continue;
+            }
+
+            Debug.Log("ChallengeManager: set help text " + i.ToString() + " to " + challenges[i].helpText);
+
+            // if challenge exists, enable help text and set text
+            uiController.SetShowHelpText(i, true);
+            uiController.SetHelpText(i, challenges[i].helpText);
+        }
+        UpdateHelpTextStati();
+    }
+
+    void UpdateHelpTextStati()
+    {
+        for(int i = 0; i < challenges.Length; i++)
+        {
+            Challenge c = challenges[i]; 
+
+            HelpTextState state;
+            if (c.isActive)
+            {
+                if (c.getIsCompleted())
+                {
+                    state = HelpTextState.ActiveComplete;
+                } else
+                {
+                    state = HelpTextState.ActiveIncomplete;
+                }
+            } else
+            {
+                if (c.getIsCompleted())
+                {
+                    state = HelpTextState.InactiveComplete;
+                }
+                else
+                {
+                    state = HelpTextState.InactiveIncomplete;
+                }
+            }
+
+            uiController.UpdateHelpTextColor(i, state);
+        }
     }
 }

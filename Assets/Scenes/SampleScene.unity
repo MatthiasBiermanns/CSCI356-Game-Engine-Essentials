@@ -2297,10 +2297,11 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 2065640977}
   isActive: 0
+  helpText: Trigger the last trigger zone with the same cube from earlier. Collect
+    the key and unlock the door to get to the next level..
 --- !u!4 &104807826
 Transform:
   m_ObjectHideFlags: 0
@@ -3375,10 +3376,11 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 2169077694424865119}
   isActive: 0
+  helpText: Pull the remaining cube into the last trigger zone, using the now extended
+    ramp. Be carful not to move the other cubes out of their trigger zone.
 --- !u!1 &219837565
 GameObject:
   m_ObjectHideFlags: 0
@@ -4643,7 +4645,7 @@ GameObject:
   - component: {fileID: 288313162}
   - component: {fileID: 288313161}
   m_Layer: 5
-  m_Name: Grenade Challenge Text
+  m_Name: Help Text 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4689,8 +4691,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5. Hold and release the right mouse button to throw a grenade. Use it to
-    break the wall.
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7135,26 +7136,15 @@ MonoBehaviour:
   canUncomplete: 0
   onChallengeCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2143774682}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnAgent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 1699703441}
   isActive: 0
+  helpText: Activate the red trigger zone. Beware of your opponents, who might try
+    to sabotage your progress.
 --- !u!1 &505739168
 GameObject:
   m_ObjectHideFlags: 0
@@ -7892,10 +7882,12 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 1303683696}
   triggers:
   - {fileID: 736256359}
   isActive: 0
+  helpText: "Use your grappling hook to get on the elevated platform. Start by extending
+    your grappling hook by pressing \"F\", then press \"P\" while it\u2019s extended
+    to pull yourself onto the higher platform."
 --- !u!1 &553684783
 GameObject:
   m_ObjectHideFlags: 0
@@ -8461,10 +8453,11 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 1163295173}
   triggers:
   - {fileID: 1803797581}
   isActive: 0
+  helpText: "Shoot the white cube to change its color and learn the game\u2019s color
+    order."
 --- !u!1001 &591442707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9890,7 +9883,7 @@ GameObject:
   - component: {fileID: 673613785}
   - component: {fileID: 673613784}
   m_Layer: 5
-  m_Name: Key Challenge Text
+  m_Name: Help Text 7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9936,8 +9929,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 7. Pick up the white key by walking through the white sphere. Keys are
-    used to open doors. Once used, a key is removed from your inventory.
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12220,7 +12212,7 @@ GameObject:
   - component: {fileID: 786980401}
   - component: {fileID: 786980400}
   m_Layer: 5
-  m_Name: Cube Push Challenge Text
+  m_Name: Help Text 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12266,8 +12258,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 2. Push the red cube onto the red trigger behind it to learn how trigger
-    zones are activated.
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12392,26 +12383,15 @@ MonoBehaviour:
   canUncomplete: 0
   onChallengeCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 737586068}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnAgent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 1927961801}
   isActive: 0
+  helpText: Activate the blue trigger zone. Beware of your opponents, who might try
+    to sabotage your progress.
 --- !u!1001 &796999386
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13414,26 +13394,15 @@ MonoBehaviour:
   canUncomplete: 0
   onChallengeCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1018298549}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnAgent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 1108104248}
   isActive: 0
+  helpText: Activate the magenta trigger zone. Beware of your opponents, who might
+    try to sabotage your progress.
 --- !u!1 &840436744
 GameObject:
   m_ObjectHideFlags: 0
@@ -14769,26 +14738,16 @@ MonoBehaviour:
   canUncomplete: 0
   onChallengeCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 157618076}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnGrenadePickUp
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 1585086079}
   isActive: 0
+  helpText: Trigger the magenta trigger zone to enable the grenade spawn. Collect
+    the grenade from the elevated platform and use it to make your way to the next
+    room.
 --- !u!1001 &916421563
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15370,7 +15329,7 @@ GameObject:
   - component: {fileID: 972408669}
   - component: {fileID: 972408668}
   m_Layer: 5
-  m_Name: Cube Pull Challenge Text
+  m_Name: Help Text 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15416,8 +15375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 3. Pull the green cube onto the red trigger in front of it by pressing
-    F and walking backwards to learn how to use your grappling hook.
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -16703,7 +16661,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7324012105050048896, guid: 8cf1ff9a105cbce4185ba560e3bf8c5b, type: 3}
   m_PrefabInstance: {fileID: 6459545542004651123}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1072256691 stripped
+--- !u!114 &1072256688 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4454831263036439362, guid: 8cf1ff9a105cbce4185ba560e3bf8c5b, type: 3}
   m_PrefabInstance: {fileID: 6459545542004651123}
@@ -18280,10 +18238,10 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 1719628008}
   triggers:
   - {fileID: 9031276439336765960}
   isActive: 0
+  helpText: Use double jump to get onto the elevated platform.
 --- !u!1 &1154279791
 GameObject:
   m_ObjectHideFlags: 0
@@ -18475,7 +18433,7 @@ GameObject:
   - component: {fileID: 1163295174}
   - component: {fileID: 1163295173}
   m_Layer: 5
-  m_Name: Color Change Challenge Text
+  m_Name: Help Text 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18521,8 +18479,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "1. Shoot the white cube to change its color and learn the game\u2019s
-    color order."
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -19937,11 +19894,7 @@ MonoBehaviour:
   volumeOffSprite: {fileID: 21300000, guid: bd5a32abe65525e48ac214429e7f716c, type: 3}
   progressFill: {fileID: 1934918743}
   progressBar: {fileID: 1401645916}
-  helpPopup: {fileID: 1538439982}
   clock: {fileID: 2131304936}
-  startScreen: {fileID: 1797490509}
-  leaderboardScreen: {fileID: 1699151107}
-  endScreen: {fileID: 937370322}
   helpButton: {fileID: 354464519}
   settingsButton: {fileID: 1144959349}
   levelImage: {fileID: 472152608}
@@ -19955,6 +19908,23 @@ MonoBehaviour:
   highScoreStartScreen: {fileID: 1892082982}
   highScoreEndScreen: {fileID: 890051683}
   grenadeCounterText: {fileID: 614450607}
+  playerHint: {fileID: 0}
+  startScreen: {fileID: 1797490509}
+  leaderboardScreen: {fileID: 1699151107}
+  endScreen: {fileID: 937370322}
+  helpPopup: {fileID: 1538439982}
+  helpTexts:
+  - {fileID: 1163295173}
+  - {fileID: 786980400}
+  - {fileID: 972408668}
+  - {fileID: 1719628008}
+  - {fileID: 288313161}
+  - {fileID: 1303683696}
+  - {fileID: 673613784}
+  helpTextActiveIncompleteColor: {r: 1, g: 1, b: 1, a: 1}
+  helpTextActiveCompleteColor: {r: 0.047086466, g: 0.8113208, b: 0, a: 1}
+  helpTextInactiveIncompleteColor: {r: 0.4245283, g: 0.4245283, b: 0.4245283, a: 1}
+  helpTextInactiveCompleteColor: {r: 0.2786935, g: 0.4811321, b: 0.2786935, a: 1}
   leaderboardNames:
   - {fileID: 678831903}
   - {fileID: 1172819786}
@@ -21347,7 +21317,7 @@ GameObject:
   - component: {fileID: 1303683697}
   - component: {fileID: 1303683696}
   m_Layer: 5
-  m_Name: Grappling Hook Challenge Text
+  m_Name: Help Text 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21393,8 +21363,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "6. Use your grappling hook and press P while it\u2019s extended to reach
-    the higher platform."
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -24650,10 +24619,11 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 786980400}
   triggers:
   - {fileID: 1460546752}
   isActive: 0
+  helpText: Push the red cube onto the red trigger behind it to learn how trigger
+    zones are activated.
 --- !u!4 &1458906802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2154415792522171471, guid: 258a0f35759ed4340ba77ecd34e48051, type: 3}
@@ -29160,7 +29130,7 @@ MonoBehaviour:
   onChallengeCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1072256691}
+      - m_Target: {fileID: 1072256688}
         m_TargetAssemblyTypeName: MoveRamp, Assembly-CSharp
         m_MethodName: MoveUp
         m_Mode: 1
@@ -29175,7 +29145,7 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1072256691}
+      - m_Target: {fileID: 1072256688}
         m_TargetAssemblyTypeName: MoveRamp, Assembly-CSharp
         m_MethodName: MoveDown
         m_Mode: 1
@@ -29187,12 +29157,13 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  label: {fileID: 0}
   triggers:
   - {fileID: 9114627589392143824}
   - {fileID: 8745640306794643486}
   - {fileID: 7777595765829468226}
   isActive: 0
+  helpText: Change the color fo 3 cubes and move them into the respective trigger
+    zones.
 --- !u!1 &1706657923
 GameObject:
   m_ObjectHideFlags: 0
@@ -29510,7 +29481,7 @@ GameObject:
   - component: {fileID: 1719628009}
   - component: {fileID: 1719628008}
   m_Layer: 5
-  m_Name: Double Jump Challenge Text
+  m_Name: Help Text 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29556,7 +29527,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 4. Use double jump to get onto the white area and test the double jump.
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -29666,26 +29637,16 @@ MonoBehaviour:
   canUncomplete: 0
   onChallengeCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 157935576}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnGrenadePickUp
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 1256180332}
   isActive: 0
+  helpText: Trigger the yellow trigger zone with the same cube from earlier. Collect
+    the grenade from the new activated spawn and use it to make your way to the next
+    room.
 --- !u!4 &1728636799
 Transform:
   m_ObjectHideFlags: 0
@@ -30620,10 +30581,11 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 972408668}
   triggers:
   - {fileID: 1978087879}
   isActive: 0
+  helpText: Pull the green cube onto the green trigger in front of it by pressing
+    F and walking backwards to learn how to use your grappling hook.
 --- !u!1001 &1784131710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31020,26 +30982,15 @@ MonoBehaviour:
   canUncomplete: 0
   onChallengeCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1695246207}
-        m_TargetAssemblyTypeName: Spawner, Assembly-CSharp
-        m_MethodName: SpawnAgent
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 0}
   triggers:
   - {fileID: 814042770}
   isActive: 0
+  helpText: Activate the green trigger zone. Beware of your opponents, who might
+    try to sabotage your progress.
 --- !u!1001 &1823754521
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31233,10 +31184,11 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 288313161}
   triggers:
   - {fileID: 1237355668}
   isActive: 0
+  helpText: Hold and release the right mouse button to throw a grenade. Use it to
+    break the wall and enter the small room.
 --- !u!1001 &1831399295
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34403,10 +34355,12 @@ MonoBehaviour:
   onChallengeUncompleted:
     m_PersistentCalls:
       m_Calls: []
-  label: {fileID: 673613784}
   triggers:
   - {fileID: 1615237952}
   isActive: 0
+  helpText: Pick up the green key by walking through the key pickup sphere. Keys
+    are used to open doors of the same color. Once used, a key is removed from your
+    inventory.
 --- !u!1001 &1963050125
 PrefabInstance:
   m_ObjectHideFlags: 0

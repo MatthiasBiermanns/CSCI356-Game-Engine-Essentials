@@ -12,16 +12,16 @@ public class Challenge : MonoBehaviour
     public bool canUncomplete = false;
 
     [System.Serializable]
-    public class ChallengeEvent : UnityEvent<Challenge> { }
+    public class ChallengeEvent : UnityEvent<Challenge> { };
 
     public ChallengeEvent onChallengeCompleted;
     public ChallengeEvent onChallengeUncompleted;
 
-    public TMP_Text label;
-
     [SerializeField] private Trigger[] triggers;
     private bool isCompleted = false;
     public bool isActive = false;
+
+    public string helpText = "";
 
     // Start is called before the first frame update
     void Start()
@@ -73,11 +73,6 @@ public class Challenge : MonoBehaviour
         {
             onChallengeCompleted.Invoke(this);
         }
-
-        if (label != null)
-        {
-            label.color = UnityEngine.Color.green;
-        }
     }
 
     void UncompleteChallenge()
@@ -90,11 +85,6 @@ public class Challenge : MonoBehaviour
         if( onChallengeUncompleted != null )
         { 
             onChallengeUncompleted.Invoke(this); 
-        }
-
-        if (label != null)
-        {
-            label.color = UnityEngine.Color.white;
         }
     }
 

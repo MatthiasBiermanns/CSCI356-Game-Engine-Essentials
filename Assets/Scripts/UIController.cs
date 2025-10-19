@@ -7,8 +7,12 @@ using UnityEngine.AI;
 
 public class UIController : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private SceneController sceneController;
+    private GameObject player;
+    private GameObject mainCamera;
 
+    [Header("Settings")]
     [SerializeField] private Image settingsPopup;
     [SerializeField] private AudioSource music;
     [SerializeField] private Slider mouseSensitivitySlider;
@@ -18,15 +22,12 @@ public class UIController : MonoBehaviour
     [SerializeField] private Sprite volumeOnSprite;
     [SerializeField] private Sprite volumeOffSprite;
 
+    [Header("Ingame Overlay")]
+
     [SerializeField] private Image progressFill;
     [SerializeField] private Image progressBar;
 
-    [SerializeField] private Image helpPopup;
     [SerializeField] private Image clock;
-
-    [SerializeField] private Image startScreen;
-    [SerializeField] private Image leaderboardScreen;
-    [SerializeField] private Image endScreen;
 
     [SerializeField] private Button helpButton;
     [SerializeField] private Button settingsButton;
@@ -43,15 +44,33 @@ public class UIController : MonoBehaviour
     public TMP_Text highScoreStartScreen;
     public TMP_Text highScoreEndScreen;
     public TMP_Text grenadeCounterText;
+    public TMP_Text playerHint;
 
+    [Header("UI Screens")]
+    [SerializeField] private Image startScreen;
+    [SerializeField] private Image leaderboardScreen;
+    [SerializeField] private Image endScreen;
+
+    [Header ("Help Text Customizing")]
+    [SerializeField] private Image helpPopup;
+    public TMP_Text[] helpTexts;
+    [SerializeField] private UnityEngine.Color helpTextActiveIncompleteColor;
+    [SerializeField] private UnityEngine.Color helpTextActiveCompleteColor;
+    [SerializeField] private UnityEngine.Color helpTextInactiveIncompleteColor;
+    [SerializeField] private UnityEngine.Color helpTextInactiveCompleteColor;
+
+    private bool[] showHelpTexts;
+
+    [Header("Leader Board")]
     public TMP_Text[] leaderboardNames;
     public TMP_Text[] leaderboardScores;
     public TMP_InputField playerNameInput;
+
+
+    private bool showCrosshair = false;
     private bool scoreSaved = false;
     private bool fromEndScreen = false;
 
-    GameObject player;
-    GameObject mainCamera;
 
     // Start is called before the first frame update
     void Start()
@@ -86,6 +105,11 @@ public class UIController : MonoBehaviour
         player.GetComponent<MouseLook>().enabled = false;
         mainCamera.GetComponent<MouseLook>().enabled = false;
         Cursor.lockState = CursorLockMode.None;
+
+        showHelpTexts = new bool[helpTexts.Length];
+        for (int i = 0; i < showHelpTexts.Length; i++) { 
+            showHelpTexts[i] = false; 
+        }
     }
 
     // Update is called once per frame
@@ -98,6 +122,25 @@ public class UIController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+    }
+
+    private void OnGUI()
+    {
+        if (!showCrosshair)
+        {
+            return;
+        }
+        
+        int size = 12;
+
+        Camera cam = Camera.main;
+
+        // centre of screen and caters for font size
+        float posX = cam.pixelWidth / 2 - size / 4;
+        float posY = cam.pixelHeight / 2 - size / 2;
+
+        // displays "*" on screen
+        GUI.Label(new Rect(posX, posY, size, size), "*");
     }
 
     public void OnCloseSettings()
@@ -114,6 +157,7 @@ public class UIController : MonoBehaviour
         Cursor.visible = false;
 
         sceneController.ResumeTimer();
+        SetShowCrosshair(true);
     }
 
     public void OnOpenSettings()
@@ -127,11 +171,18 @@ public class UIController : MonoBehaviour
         mainCamera.GetComponent<MouseLook>().enabled = false;
 
         sceneController.StopTimer();
+        SetShowCrosshair(false);
     }
 
     public void OnOpenHelp()
     {
         helpPopup.gameObject.SetActive(true);
+
+        for (int i = 0; i < helpTexts.Length; i++)
+        {
+            helpTexts[i].gameObject.SetActive(showHelpTexts[i]);
+        }
+        SetShowCrosshair(false);
     }
     public void OnCloseHelp()
     {
@@ -139,6 +190,7 @@ public class UIController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        SetShowCrosshair(true);
     }
 
     public void OnMouseSensitivityChange()
@@ -231,6 +283,7 @@ public class UIController : MonoBehaviour
         player.GetComponent<MouseLook>().enabled = true;
         mainCamera.GetComponent<MouseLook>().enabled = true;
         Cursor.lockState = CursorLockMode.Locked;
+        SetShowCrosshair(true);
     }
 
     public void UpdateHighScore(float score)
@@ -249,6 +302,7 @@ public class UIController : MonoBehaviour
 
     public void OnRestartGame()
     {
+        SetShowCrosshair(false);
         Start();
     }
 
@@ -368,6 +422,7 @@ public class UIController : MonoBehaviour
         sceneController.StopTimer();
         endScreen.gameObject.SetActive(true);
         scoreSaved = false;
+        SetShowCrosshair(false);
     }
 
     public void ResetScores()
@@ -375,5 +430,67 @@ public class UIController : MonoBehaviour
         UpdateLeaderboard(new List<SceneController.ScoreEntry>());
         UpdateHighScore(0f);
         scoreSaved = false;
+    }
+
+    public void UpdateHelpTextColor(int idx, HelpTextState state)
+    {
+        if (idx >= helpTexts.Length)
+        {
+            return;
+        }
+
+        switch ( state )
+        {
+            case HelpTextState.ActiveIncomplete:
+                helpTexts[idx].color = helpTextActiveIncompleteColor;
+                return;
+            case HelpTextState.ActiveComplete:
+                helpTexts[idx].color = helpTextActiveCompleteColor;
+                return;
+            case HelpTextState.InactiveIncomplete:
+                helpTexts[idx].color = helpTextInactiveIncompleteColor;
+                return;
+            case HelpTextState.InactiveComplete:
+                helpTexts[idx].color = helpTextInactiveCompleteColor;
+                return;
+            default:
+                return;
+        }
+    }
+
+    public void SetHelpText(int idx, string text)
+    {
+        if (idx >= helpTexts.Length)
+        {
+            return;
+        }
+
+        helpTexts[idx].text = (idx+1).ToString() + ". " + text;
+    }
+
+    public void SetShowHelpText(int idx, bool value)
+    {
+        if (idx >= showHelpTexts.Length)
+        {
+            return;
+        }
+
+        Debug.Log("UIController: set " + helpTexts[idx].name + " to " + value);
+        showHelpTexts[idx] = value;
+    }
+
+    public void SetPlayerHint(string value)
+    {
+        playerHint.text = value;
+    }
+
+    public void SetPlayerHintEnabled(bool value)
+    {
+        playerHint.enabled = value;
+    }
+
+    public void SetShowCrosshair(bool value)
+    {
+        showCrosshair = value;
     }
 }
