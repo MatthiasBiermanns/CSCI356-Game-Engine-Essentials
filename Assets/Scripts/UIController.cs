@@ -86,9 +86,6 @@ public class UIController : MonoBehaviour
         leaderboardScreen.gameObject.SetActive(false);
         endScreen.gameObject.SetActive(false);
 
-        // reset leaderboard at start
-        UpdateLeaderboard(new List<SceneController.ScoreEntry>());
-
         // get references to the player and camera
         player = GameObject.FindGameObjectWithTag("Player");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
