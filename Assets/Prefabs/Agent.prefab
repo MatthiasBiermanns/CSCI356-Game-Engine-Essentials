@@ -144,7 +144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fdb8b45fa0b84c499fe3e3bb592b434, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lives: 3
+  target: {fileID: 0}
+  pushDistance: 1.2
+  pushTime: 1.5
+  pushMoveFactor: 0.8
+  stoppingDistance: 0.05
+  shoveForce: 60
+  lives: 10
+  attackBelowLives: 5
 --- !u!54 &3363848543870238068
 Rigidbody:
   m_ObjectHideFlags: 0

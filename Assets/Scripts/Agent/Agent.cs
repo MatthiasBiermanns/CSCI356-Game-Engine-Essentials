@@ -23,7 +23,10 @@ public class Agent : MonoBehaviour
     Vector3 dir;
 
     private bool active = true;
-    public int lives = 3;
+    private bool attacking = false;
+    private float attackingSpeed = 3f;
+    public int lives = 10;
+    public int attackBelowLives = 5;
 
     // Start is called before the first frame update
     void Awake()
@@ -55,7 +58,25 @@ public class Agent : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        else if (lives < 5 && !attacking)
+        {
+            StartCoroutine(AttackPlayer());
+        }
         StartCoroutine(PauseMovement(2.0f));
+    }
+
+    IEnumerator AttackPlayer()
+    {
+        attacking = true;
+        Transform player = GameObject.FindGameObjectWithTag("Player").transform;
+        while (player != null && lives > 0)
+        {
+            agent.SetDestination(player.position);
+            agent.speed = attackingSpeed;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        attacking = false;
     }
 
     IEnumerator PauseMovement(float duration)
