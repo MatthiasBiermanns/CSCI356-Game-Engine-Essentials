@@ -18,6 +18,7 @@ public class Challenge : MonoBehaviour
     public ChallengeEvent onChallengeUncompleted;
 
     [SerializeField] private Trigger[] triggers;
+    private AgentSpawner agentSpawner;
     private bool isCompleted = false;
     public bool isActive = false;
 
@@ -26,7 +27,7 @@ public class Challenge : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        agentSpawner = GetComponent<AgentSpawner>();
     }
 
     // Update is called once per frame
@@ -73,6 +74,11 @@ public class Challenge : MonoBehaviour
         {
             onChallengeCompleted.Invoke(this);
         }
+
+        if (agentSpawner != null)
+        {
+            agentSpawner.SpawnAgentForChallenge(this);
+        }
     }
 
     void UncompleteChallenge()
@@ -85,6 +91,11 @@ public class Challenge : MonoBehaviour
         if( onChallengeUncompleted != null )
         { 
             onChallengeUncompleted.Invoke(this); 
+        }
+
+        if (agentSpawner != null)
+        {
+            agentSpawner.DestroyCurrentAgent();
         }
     }
 

@@ -114,7 +114,7 @@ public class SceneController : MonoBehaviour
         controller.OnStartGame();
 
         characterController.enabled = false;
-        player.transform.position = new Vector3(-10f, 1f, -3f);
+        player.transform.position = new Vector3(37.37f, 1f, 8f);
         characterController.enabled = true;
         tutorialChallengeManager.enabled = true;
     }

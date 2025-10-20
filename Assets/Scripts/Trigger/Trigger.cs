@@ -75,4 +75,13 @@ public class Trigger : MonoBehaviour
             triggerCube.Freeze();
         }
     }
+
+    public GameObject GetCubeInZone()
+    {
+        if (triggerObjectCollider != null)
+        {
+            return triggerObjectCollider.gameObject;
+        }
+        return null;
+    }
 }

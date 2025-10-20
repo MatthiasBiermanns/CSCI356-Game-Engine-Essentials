@@ -108,6 +108,7 @@ public class Spawner : MonoBehaviour
     {
         NavMeshAgent newAgent = Instantiate(agentPrefab, agentSpawnPosition, Quaternion.identity);
         newAgent.SetDestination(agentTarget.position);
+        newAgent.stoppingDistance = 0.3f;
     }
 
     IEnumerator Respawn(Action respawnFunction)
