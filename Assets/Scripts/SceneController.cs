@@ -62,9 +62,9 @@ public class SceneController : MonoBehaviour
         controller.currentKeyText.text = "Current Key: None";
     }
 
-    public void LevelUp()
+    public void LevelUp(int level)
     {
-        currentLevel++;
+        currentLevel = level;
         controller.levelLabel.text = currentLevel.ToString();
     }
 
@@ -114,7 +114,7 @@ public class SceneController : MonoBehaviour
         controller.OnStartGame();
 
         characterController.enabled = false;
-        player.transform.position = new Vector3(37.37f, 1f, 8f);
+        player.transform.position = new Vector3(-10f, 1f, -3f);
         characterController.enabled = true;
         tutorialChallengeManager.enabled = true;
     }
@@ -167,5 +167,9 @@ public class SceneController : MonoBehaviour
         AddBestScore(name, elapsedTime);
     }
 
-
+    public void AddTimePenalty(float penalty)
+    {
+        elapsedTime += penalty;
+        controller.UpdateTimerText(elapsedTime);
+    }
 }

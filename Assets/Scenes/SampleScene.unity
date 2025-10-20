@@ -7076,7 +7076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8569393159987257049, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: m_Name
-      value: AbilitySwitch
+      value: LevelUpTrigger
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.size
@@ -7084,7 +7084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -7141,6 +7141,10 @@ PrefabInstance:
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: UIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
+      propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -18606,7 +18610,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
@@ -18659,6 +18663,10 @@ PrefabInstance:
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
       value: UIController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
+      propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_IntArgument
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8823721831689463827, guid: 93b8594aa6b546e46ad2419576609af0, type: 3}
       propertyPath: onTrigger.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -22353,11 +22361,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1256415224}
         m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
         m_MethodName: LevelUp
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

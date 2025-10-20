@@ -8,7 +8,6 @@ public class AgentSpawner : MonoBehaviour
     public GameObject agentPrefab;
     public Transform agentSpawnPoint;
     private GameObject agent;
-    private bool agentSpawned = false;
 
     // Start is called before the first frame update
     void Start()
@@ -32,17 +31,17 @@ public class AgentSpawner : MonoBehaviour
             if (cube != null)
             {
                 Debug.Log($"AgentSpawner: Spawning agent to push cube {cube.name} from {trigger.name}");
-                StartCoroutine(SpawnAndPush(cube));
+                StartCoroutine(SpawnAndPush(cube, trigger.transform.position));
                 return;
             }
         }
 
         // If no cube found, just aim for the first trigger as fallback
         var fallback = challenge.GetComponentsInChildren<Trigger>()[0];
-        StartCoroutine(SpawnAndPush(fallback.gameObject));
+        StartCoroutine(SpawnAndPush(fallback.gameObject, fallback.transform.position));
     }
 
-    IEnumerator SpawnAndPush(GameObject cube)
+    IEnumerator SpawnAndPush(GameObject cube, Vector3 triggerCenter)
     {
         // Spawn the agent
         GameObject agentObj = Instantiate(agentPrefab, agentSpawnPoint.position, Quaternion.identity);
@@ -51,7 +50,7 @@ public class AgentSpawner : MonoBehaviour
         var agentLogic = agentObj.GetComponent<Agent>();
         if (!agentLogic) agentLogic = agentObj.AddComponent<Agent>();
 
-        agentLogic.PushCube(cube.transform, transform.position);
+        agentLogic.StartPush(cube.transform, triggerCenter);
 
         yield return null;
     }
