@@ -102,6 +102,7 @@ public class UIController : MonoBehaviour
         player.GetComponent<MouseLook>().enabled = false;
         mainCamera.GetComponent<MouseLook>().enabled = false;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         showHelpTexts = new bool[helpTexts.Length];
         for (int i = 0; i < showHelpTexts.Length; i++) { 

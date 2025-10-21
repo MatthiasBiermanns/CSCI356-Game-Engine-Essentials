@@ -22337,7 +22337,7 @@ MonoBehaviour:
   - {fileID: 1831076113}
   - {fileID: 550354330}
   - {fileID: 1950748495}
-  enforceOrder: 0
+  enforceOrder: 1
   triggerIntermediatePosition: 6
   isUniqueIntermediateTrigger: 1
   onIntermediateCompleted:
