@@ -129,6 +129,7 @@ public class SceneController : MonoBehaviour
     {
         controller.OnStartGame();
 
+        LevelUp(0);
         characterController.enabled = false;
         player.transform.position = new Vector3(-10f, 1f, -3f);
         characterController.enabled = true;

@@ -151,7 +151,12 @@ public class UIController : MonoBehaviour
     {
         // don't display the settings popup
         settingsPopup.gameObject.SetActive(false);
-        progressBar.gameObject.SetActive(true);
+
+        // show the progress bar only on level 0 (tutorial)
+        if (sceneController != null && sceneController.currentLevel == 0)
+        {
+            progressBar.gameObject.SetActive(true);
+        }
 
         player.GetComponent<FPSInput>().enabled = true;
         player.GetComponent<MouseLook>().enabled = true;
