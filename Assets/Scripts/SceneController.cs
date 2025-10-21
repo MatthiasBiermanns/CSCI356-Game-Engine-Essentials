@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class SceneController : MonoBehaviour
     private List<ScoreEntry> bestScores = new List<ScoreEntry>();
     private int maxBestScores = 5;
 
+    [System.Serializable]
     public struct ScoreEntry
     {
         public string playerName;
@@ -33,6 +35,12 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    [System.Serializable]
+    class ScoreData 
+    { 
+        public List<ScoreEntry> scores = new List<ScoreEntry>(); 
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +49,13 @@ public class SceneController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
 
         characterController = player.GetComponent<CharacterController>();
+
+        LoadBestScores();
+        if (bestScores.Count > 0)
+        {
+            SetHighScore(bestScores[0].score);
+        }
+        controller.UpdateLeaderboard(bestScores);
     }
 
     // Update is called once per frame
@@ -107,6 +122,7 @@ public class SceneController : MonoBehaviour
         highScore = 0f;
         bestScores.Clear();
         controller.ResetScores();
+        DeleteBestScores();
     }
 
     public void OnStartGame()
@@ -137,12 +153,8 @@ public class SceneController : MonoBehaviour
 
     public void OnRestartGame()
     {
-        controller.OnRestartGame();
-        currentLevel = 0;
-        controller.levelLabel.text = currentLevel.ToString();
-
-        ResetTimer();
-        ResetKeyText();
+        var scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.buildIndex);
     }
 
     private void AddBestScore(string name, float score)
@@ -160,11 +172,36 @@ public class SceneController : MonoBehaviour
 
         SetHighScore(bestScores[0].score);
         controller.UpdateLeaderboard(bestScores);
+        SaveBestScores();
     }
 
     public void SaveScore(string name)
     {
         AddBestScore(name, elapsedTime);
+    }
+
+    void SaveBestScores()
+    {
+        ScoreData data = new ScoreData();
+        data.scores = bestScores;
+        string json = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString("BestScores", json);
+        PlayerPrefs.Save();
+    }
+
+    void LoadBestScores()
+    {
+        if (PlayerPrefs.HasKey("BestScores"))
+        {
+            string json = PlayerPrefs.GetString("BestScores");
+            ScoreData data = JsonUtility.FromJson<ScoreData>(json);
+            bestScores = data.scores;
+        }
+    }
+
+    void DeleteBestScores()
+    {
+        PlayerPrefs.DeleteKey("BestScores");
     }
 
     public void AddTimePenalty(float penalty)
