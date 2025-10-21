@@ -3218,7 +3218,7 @@ MonoBehaviour:
   - {fileID: 2169077694424865119}
   isActive: 0
   helpText: Pull the remaining cube into the last trigger zone, using the now extended
-    ramp. Be carful not to move the other cubes out of their trigger zone.
+    ramp. Be careful not to move the other cubes out of their trigger zones.
 --- !u!1 &219837565
 GameObject:
   m_ObjectHideFlags: 0
@@ -28024,7 +28024,7 @@ MonoBehaviour:
   - {fileID: 8745640306794643486}
   - {fileID: 7777595765829468226}
   isActive: 0
-  helpText: Change the color fo 3 cubes and move them into the respective trigger
+  helpText: Change the color for 3 cubes and move them into the respective trigger
     zones.
 --- !u!1 &1706657923
 GameObject:
